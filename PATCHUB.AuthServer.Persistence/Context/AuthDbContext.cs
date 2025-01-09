@@ -17,7 +17,6 @@ namespace PATCHUB.AuthServer.Persistence.Context
 
         #region |       DbSet Entity Classes        |
 
-        public DbSet<UserEntity> User { get; set; }
         public DbSet<UserRefreshTokenEntity> UserRefreshToken { get; set; }
 
         #endregion
@@ -29,9 +28,11 @@ namespace PATCHUB.AuthServer.Persistence.Context
         protected override void OnModelCreating(ModelBuilder builder)
         {
             #region |       ModelBuilder Configuration      | 
+            // Dinamik olarak entity'leri ekliyor
+            //builder.ApplyConfigurationsFromAssembly(GetType().Assembly);
 
-            builder.ApplyConfigurationsFromAssembly(GetType().Assembly);
-
+            // Manuel ekleme
+            builder.ApplyConfiguration(new UserRefreshTokenConfiguration());
             #endregion
 
             // foreignkey kaybı varsa, verileri manuel silme ayarı!

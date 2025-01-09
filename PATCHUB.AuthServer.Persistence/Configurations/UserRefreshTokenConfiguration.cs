@@ -13,6 +13,7 @@ namespace PATCHUB.AuthServer.Persistence.Configurations
         {
             builder.ToTable("USER_REFRESH_TOKEN", "dbo");
             builder.HasNoKey();
+
             builder.Property(x => x.IDUser).IsRequired();
             builder.Property(x => x.Token).IsRequired().HasMaxLength(200);
             builder.Property(x => x.ExpirationDate).IsRequired();

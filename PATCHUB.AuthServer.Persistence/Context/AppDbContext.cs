@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using PATCHUB.AuthServer.Domain.Entities;
+using PATCHUB.AuthServer.Persistence.Configurations;
 
 namespace PATCHUB.AuthServer.Persistence.Context
 {
@@ -16,7 +17,6 @@ namespace PATCHUB.AuthServer.Persistence.Context
         #region |       DbSet Entity Classes        |
 
         public DbSet<UserEntity> User { get; set; }
-        public DbSet<UserRefreshTokenEntity> UserRefreshToken { get; set; }
 
         #endregion
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
@@ -27,9 +27,11 @@ namespace PATCHUB.AuthServer.Persistence.Context
         protected override void OnModelCreating(ModelBuilder builder)
         {
             #region |       ModelBuilder Configuration      | 
+            // Dinamik olarak entity'leri ekliyor
+            //builder.ApplyConfigurationsFromAssembly(GetType().Assembly);
 
-            builder.ApplyConfigurationsFromAssembly(GetType().Assembly);
-
+            // Manuel ekleme
+            builder.ApplyConfiguration(new UserConfiguration());
             #endregion
 
             // foreignkey kaybı varsa, verileri manuel silme ayarı!
