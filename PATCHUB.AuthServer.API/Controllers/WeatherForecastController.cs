@@ -1,10 +1,13 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PATCHUB.AuthServer.Application.Dtos;
+using PATCHUB.AuthServer.Infrastructure.AuthTokenService;
 using PATCHUB.AuthServer.Persistence.Repositories;
 
 namespace PATCHUB.AuthServer.API.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class WeatherForecastController : ControllerBase
     {
         private static readonly string[] Summaries = new[]
@@ -15,29 +18,60 @@ namespace PATCHUB.AuthServer.API.Controllers
         private readonly ILogger<WeatherForecastController> _logger;
         private readonly UserRefreshTokenRepository _userRefreshTokenRepository;
 
+        private readonly AuthenticationService _authenticationService;
+
         public WeatherForecastController(ILogger<WeatherForecastController> logger
-                                       , UserRefreshTokenRepository userRefreshTokenRepository)
+                                       , UserRefreshTokenRepository userRefreshTokenRepository
+                                       , AuthenticationService authenticationService)
         {
             _logger = logger;
             _userRefreshTokenRepository = userRefreshTokenRepository;
+            _authenticationService = authenticationService;
         }
 
-        [HttpGet(Name = "GetWeatherForecast")]
-        public IEnumerable<WeatherForecast> Get()
+        [HttpGet("CreateTokenAsync")]
+        public SharedLibrary.Dtos.Response<AppToken> CreateTokenAsync()
         {
-            var test0 = _userRefreshTokenRepository.GetCount();
-            var test1 = _userRefreshTokenRepository.GetAll();
-            var test2 = _userRefreshTokenRepository.Get(w => w.IDUser == 3);
-
-            _userRefreshTokenRepository.Insert(new Domain.Entities.UserRefreshTokenEntity { IDUser = 6, Token = "deneme ALP#", ExpirationDate = DateTime.Now});
-           
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
+            try
             {
-                Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                TemperatureC = Random.Shared.Next(-20, 55),
-                Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-            })
-            .ToArray();
+                //var test0 = _userRefreshTokenRepository.GetCount();
+                //var test1 = _userRefreshTokenRepository.GetAll();
+                //var test2 = _userRefreshTokenRepository.Get(w => w.IDUser == 3).FirstOrDefault();
+
+                ////_userRefreshTokenRepository.Insert(new Domain.Entities.UserRefreshTokenEntity { IDUser = 6, Token = "deneme ALP#", ExpirationDate = DateTime.Now});
+                //_userRefreshTokenRepository.Delete(test2);
+
+               return _authenticationService.CreateTokenAsync(new Application.Dtos.AppLogin { Email = "guvenyoldas@gmail.com", Password = "ss" }).Result;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+        }
+
+        [Authorize]
+        [HttpGet("CreateTokenByRefreshToken")]
+        public SharedLibrary.Dtos.Response<AppToken> CreateTokenByRefreshToken(string refreshToken)
+        {
+            try
+            {
+                //var test0 = _userRefreshTokenRepository.GetCount();
+                //var test1 = _userRefreshTokenRepository.GetAll();
+                //var test2 = _userRefreshTokenRepository.Get(w => w.IDUser == 3).FirstOrDefault();
+
+                ////_userRefreshTokenRepository.Insert(new Domain.Entities.UserRefreshTokenEntity { IDUser = 6, Token = "deneme ALP#", ExpirationDate = DateTime.Now});
+                //_userRefreshTokenRepository.Delete(test2);
+
+                return _authenticationService.CreateTokenByRefreshToken(refreshToken).Result;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
         }
     }
 }

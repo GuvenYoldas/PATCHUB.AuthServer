@@ -6,4 +6,21 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Options" Version="9.0.1" />
+    <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.3.0" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PATCHUB.AuthServer.Application\PATCHUB.AuthServer.Application.csproj" />
+    <ProjectReference Include="..\PATCHUB.AuthServer.Persistence\PATCHUB.AuthServer.Persistence.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="PATCHUB.SharedLibrary">
+      <HintPath>..\..\..\..\inetpub\PATCHUB.SharedLibrary\PATCHUB.SharedLibrary\bin\Debug\net8.0\PATCHUB.SharedLibrary.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

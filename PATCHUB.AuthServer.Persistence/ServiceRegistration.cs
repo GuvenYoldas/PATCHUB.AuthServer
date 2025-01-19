@@ -20,14 +20,14 @@ namespace PATCHUB.AuthServer.Persistence
             serviceCollection.AddDbContext<AuthDbContext>(options =>
             options.UseSqlServer(configuration?.GetConnectionString("AuthDbSQLConnection")));
 
-            serviceCollection.AddTransient<UserRefreshTokenRepository>();
-            serviceCollection.AddTransient<UnitOfWork<AuthDbContext>>();
+            serviceCollection.AddScoped<UserRefreshTokenRepository>();
+            serviceCollection.AddScoped<UnitOfWork<AuthDbContext>>();
 
             serviceCollection.AddDbContext<AppDbContext>(options =>
             options.UseSqlServer(configuration?.GetConnectionString("AppDbSQLConnection")));
 
-            serviceCollection.AddTransient<UserRepository>();
-            serviceCollection.AddTransient<UnitOfWork<AppDbContext>>();
+            serviceCollection.AddScoped<UserRepository>();
+            serviceCollection.AddScoped<UnitOfWork<AppDbContext>>();
         }
     }
 }

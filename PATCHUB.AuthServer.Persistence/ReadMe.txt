@@ -38,4 +38,7 @@ Add-Migration Migration_Name -Context ContextName -OutputDir Migrations\SqlServe
 Add-Migration InitialCreate -Context AuthDbContext -OutputDir Migrations/AuthDb
 Update-Database -Context AuthDbContext
 
+
+Add-Migration InitialCreate -Context AppDbContext -OutputDir Migrations/AppDb
+Update-Database -Context AppDbContext
  ..................... ::::::::::::::: PATCHUB GENEL KULLANIM END :::::::::::: ....................
