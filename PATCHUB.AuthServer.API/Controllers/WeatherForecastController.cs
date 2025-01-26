@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using PATCHUB.AuthServer.Application.Dtos;
 using PATCHUB.AuthServer.Infrastructure.AuthTokenService;
 using PATCHUB.AuthServer.Persistence.Repositories;
-
+using PATCHUB.SharedLibrary.Dtos;
 namespace PATCHUB.AuthServer.API.Controllers
 {
     [ApiController]
@@ -30,7 +30,7 @@ namespace PATCHUB.AuthServer.API.Controllers
         }
 
         [HttpGet("CreateTokenAsync")]
-        public SharedLibrary.Dtos.Response<AppToken> CreateTokenAsync()
+        public Response<AppToken> CreateTokenAsync()
         {
             try
             {
@@ -53,7 +53,7 @@ namespace PATCHUB.AuthServer.API.Controllers
 
         [Authorize]
         [HttpGet("CreateTokenByRefreshToken")]
-        public SharedLibrary.Dtos.Response<AppToken> CreateTokenByRefreshToken(string refreshToken)
+        public Response<AppToken> CreateTokenByRefreshToken(string refreshToken)
         {
             try
             {
@@ -64,7 +64,7 @@ namespace PATCHUB.AuthServer.API.Controllers
                 ////_userRefreshTokenRepository.Insert(new Domain.Entities.UserRefreshTokenEntity { IDUser = 6, Token = "deneme ALP#", ExpirationDate = DateTime.Now});
                 //_userRefreshTokenRepository.Delete(test2);
 
-                return _authenticationService.CreateTokenByRefreshToken(refreshToken).Result;
+                    return _authenticationService.CreateTokenByRefreshToken(refreshToken).Result;
             }
             catch (Exception)
             {

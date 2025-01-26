@@ -27,15 +27,15 @@ builder.Services.AddAuthentication(options =>
     var tokenOptions = builder.Configuration.GetSection("TokenOption").Get<CustomTokenOption>();
     opts.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
     {
-        //ValidIssuer = tokenOptions.Issuer,
-       // ValidAudience = tokenOptions.Audience[0],
+        ValidIssuer = tokenOptions.Issuer,
+        ValidAudiences = tokenOptions.Audience,
         IssuerSigningKey = SignService.GetSymmetricSecurityKey(tokenOptions.SecurityKey),
 
         ValidateIssuerSigningKey = true,
-        ValidateAudience = false,
-        ValidateIssuer = false,
+        ValidateAudience = true,
+        ValidateIssuer = true,
         ValidateLifetime = true,
-      //  ClockSkew = TimeSpan.Zero
+        //ClockSkew = TimeSpan.Zero
     };
 });
 

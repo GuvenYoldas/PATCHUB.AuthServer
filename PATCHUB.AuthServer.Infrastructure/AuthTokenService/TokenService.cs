@@ -43,7 +43,7 @@ namespace PATCHUB.AuthServer.Infrastructure.AuthTokenService
             new Claim("tokenGuid", Guid.NewGuid().ToString())
             };
 
-            claims.AddRange(audiences.Select(x => new Claim("audiences", x)));
+            claims.AddRange(audiences.Select(x => new Claim(JwtRegisteredClaimNames.Aud, x)));
 
             return claims;
         }
@@ -51,7 +51,7 @@ namespace PATCHUB.AuthServer.Infrastructure.AuthTokenService
         private IEnumerable<Claim> GetClaimsByClient(Client client)
         {
             var claims = new List<Claim>();
-            claims.AddRange(client.Audiences.Select(x => new Claim("audiences", x)));
+            claims.AddRange(client.Audiences.Select(x => new Claim(JwtRegisteredClaimNames.Aud, x)));
 
             new Claim("tokenGuid", Guid.NewGuid().ToString());
             new Claim("id", client.Id.ToString());
