@@ -6,10 +6,4 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Reference Include="PATCHUB.SharedLibrary">
-      <HintPath>..\..\..\..\inetpub\PATCHUB.SharedLibrary\PATCHUB.SharedLibrary\bin\Debug\net8.0\PATCHUB.SharedLibrary.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
 </Project>

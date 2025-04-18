@@ -21,6 +21,7 @@ namespace PATCHUB.AuthServer.Persistence
             options.UseSqlServer(configuration?.GetConnectionString("AuthDbSQLConnection")));
 
             serviceCollection.AddScoped<UserRefreshTokenRepository>();
+            serviceCollection.AddScoped<ContactRequestRepository>();
             serviceCollection.AddScoped<UnitOfWork<AuthDbContext>>();
 
             serviceCollection.AddDbContext<AppDbContext>(options =>

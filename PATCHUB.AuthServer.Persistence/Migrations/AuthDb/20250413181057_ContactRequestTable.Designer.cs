@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PATCHUB.AuthServer.Persistence.Context;
 
@@ -11,9 +12,11 @@ using PATCHUB.AuthServer.Persistence.Context;
 namespace PATCHUB.AuthServer.Persistence.Migrations.AuthDb
 {
     [DbContext(typeof(AuthDbContext))]
-    partial class AuthDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250413181057_ContactRequestTable")]
+    partial class ContactRequestTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -28,9 +31,7 @@ namespace PATCHUB.AuthServer.Persistence.Migrations.AuthDb
                         .HasColumnType("datetime2");
 
                     b.Property<string>("FullName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Location")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Mail")
@@ -38,6 +39,7 @@ namespace PATCHUB.AuthServer.Persistence.Migrations.AuthDb
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("MessageText")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.ToTable("CONTACT_REQUEST", "dbo");

@@ -44,7 +44,6 @@ namespace PATCHUB.AuthServer.Persistence.Configurations
 
         }
 
-
     }
 }
 

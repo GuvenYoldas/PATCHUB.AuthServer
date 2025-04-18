@@ -43,6 +43,16 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAllFrontend",
+                build => build
+            .AllowAnyOrigin()
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            );
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -53,9 +63,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseCors("AllowAllFrontend");
 app.UseAuthorization();
 
 app.MapControllers();
-
 app.Run();

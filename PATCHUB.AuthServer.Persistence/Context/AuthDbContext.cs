@@ -18,7 +18,7 @@ namespace PATCHUB.AuthServer.Persistence.Context
         #region |       DbSet Entity Classes        |
 
         public DbSet<UserRefreshTokenEntity> UserRefreshToken { get; set; }
-
+        public DbSet<ContactRequestEntity> ContactRequest { get; set; }
         #endregion
         public AuthDbContext(DbContextOptions<AuthDbContext> options) : base(options)
         {
@@ -33,6 +33,7 @@ namespace PATCHUB.AuthServer.Persistence.Context
 
             // Manuel ekleme
             builder.ApplyConfiguration(new UserRefreshTokenConfiguration());
+            builder.ApplyConfiguration(new ContactRequestConfiguration());
             #endregion
 
             // foreignkey kaybı varsa, verileri manuel silme ayarı!
