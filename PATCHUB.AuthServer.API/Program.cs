@@ -62,9 +62,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+
 app.UseHttpsRedirection();
 app.UseCors("AllowAllFrontend");
+
+app.UseAuthentication(); // eksik dendi ama olmayýnca da çalýþýyo?
 app.UseAuthorization();
 
 app.MapControllers();
 app.Run();
+

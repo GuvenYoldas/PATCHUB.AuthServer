@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\PATCHUB.AuthServer.Domain\PATCHUB.AuthServer.Domain.csproj" />
     <ProjectReference Include="..\PATCHUB.AuthServer.Infrastructure\PATCHUB.AuthServer.Infrastructure.csproj" />
     <ProjectReference Include="..\PATCHUB.AuthServer.Persistence\PATCHUB.AuthServer.Persistence.csproj" />
   </ItemGroup>

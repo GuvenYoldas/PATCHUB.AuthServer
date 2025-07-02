@@ -76,7 +76,7 @@ namespace PATCHUB.AuthServer.Persistence.Repositories.Base
                 includeProperties = includeProperties ?? string.Empty;
                 IQueryable<TEntity> query = _context.Set<TEntity>();
 
-                query.AsNoTracking();
+                query = query.AsNoTracking();
 
                 if (filter != null)
                 {
@@ -368,7 +368,7 @@ namespace PATCHUB.AuthServer.Persistence.Repositories.Base
                 includeProperties = includeProperties ?? string.Empty;
                 IQueryable<TEntity> query = _context.Set<TEntity>();
 
-                query.AsNoTracking();
+                query = query.AsNoTracking();
 
                 if (isActive == true)
                 {
@@ -545,11 +545,15 @@ namespace PATCHUB.AuthServer.Persistence.Repositories.Base
           bool? isActive = true)
 
         {
-            var query = _context.Set<TEntity>().Find(id);
+            TEntity query = null;
 
-            if (isActive == true && query.StatusCode != (int)StatusCode.ACTIVE)
+            if (isActive == true)
             {
-                return null;
+                query = _context.Set<TEntity>().FirstOrDefault(x => x.ID.Equals(id) && x.StatusCode == (int)StatusCode.ACTIVE);
+            }
+            else
+            {
+                query = _context.Set<TEntity>().Find(id);
             }
 
             return query;
@@ -560,14 +564,18 @@ namespace PATCHUB.AuthServer.Persistence.Repositories.Base
           bool? isActive = true)
 
         {
-            var query = await _context.Set<TEntity>().FindAsync(id);
+            TEntity query = null;
+             
 
-            if (isActive == true && query.StatusCode != (int)StatusCode.ACTIVE)
+            if (isActive == true)
             {
-                return null;
+                query = await _context.Set<TEntity>().FirstOrDefaultAsync(x => x.ID.Equals(id) && x.StatusCode == (int)StatusCode.ACTIVE);
             }
-
-            return query;
+            else
+            {
+                query = await _context.Set<TEntity>().FindAsync(id);
+            }
+                return query;
         }
 
         public virtual int GetCount(

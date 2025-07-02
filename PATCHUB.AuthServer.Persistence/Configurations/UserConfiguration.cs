@@ -21,9 +21,9 @@ namespace PATCHUB.AuthServer.Persistence.Configurations
             builder.HasIndex(x => x.PhoneNo).IsUnique();
 
 
-            builder.Property(x => x.IdentityNumber).IsRequired();
+            builder.Property(x => x.IdentityNumber);
             builder.Property(x => x.Mail).IsRequired();
-            builder.Property(x => x.PhoneNo).IsRequired();
+            builder.Property(x => x.PhoneNo);
 
             builder.Property(x => x.Balance).IsRequired().HasDefaultValue(0);
             builder.Property(x => x.UserType).HasDefaultValue(100);

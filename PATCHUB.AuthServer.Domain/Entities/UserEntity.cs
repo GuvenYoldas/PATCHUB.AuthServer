@@ -13,7 +13,7 @@ namespace PATCHUB.AuthServer.Domain.Entities
         public UserEntity()
         {
         }
-        public string IdentityNumber { get; set; }
+        public string? IdentityNumber { get; set; }
         public string Name { get; set; }
         public string LastName { get; set; }
         public string? UserName { get; set; }
@@ -27,7 +27,7 @@ namespace PATCHUB.AuthServer.Domain.Entities
         public string PasswordHash { get; set; }
         public decimal Balance { get; set; } = 0;
         public int UserType { get; set; } = 100;
-        public string ActivatorKey { get; set; }
+        public string? ActivatorKey { get; set; }
         public string? ReferenceUser { get; set; }
 
     }

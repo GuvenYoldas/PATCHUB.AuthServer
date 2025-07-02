@@ -12,7 +12,7 @@ using PATCHUB.AuthServer.Persistence.Context;
 namespace PATCHUB.AuthServer.Persistence.Migrations.AppDb
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250118215543_InitialCreate")]
+    [Migration("20250624164427_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -36,7 +36,6 @@ namespace PATCHUB.AuthServer.Persistence.Migrations.AppDb
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
                     b.Property<string>("ActivatorKey")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("AddressBill")
@@ -54,7 +53,6 @@ namespace PATCHUB.AuthServer.Persistence.Migrations.AppDb
                         .HasDefaultValue(0m);
 
                     b.Property<string>("CountryCode")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("CreateDate")
@@ -70,7 +68,6 @@ namespace PATCHUB.AuthServer.Persistence.Migrations.AppDb
                         .HasColumnName("CREATE_USERID");
 
                     b.Property<string>("IdentityNumber")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("LastName")
@@ -91,7 +88,6 @@ namespace PATCHUB.AuthServer.Persistence.Migrations.AppDb
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNo")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ReferenceUser")
@@ -118,7 +114,6 @@ namespace PATCHUB.AuthServer.Persistence.Migrations.AppDb
                         .HasColumnName("UPDATE_USERID");
 
                     b.Property<string>("UserName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("UserType")
@@ -129,13 +124,15 @@ namespace PATCHUB.AuthServer.Persistence.Migrations.AppDb
                     b.HasKey("ID");
 
                     b.HasIndex("IdentityNumber")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[IdentityNumber] IS NOT NULL");
 
                     b.HasIndex("Mail")
                         .IsUnique();
 
                     b.HasIndex("PhoneNo")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[PhoneNo] IS NOT NULL");
 
                     b.ToTable("USER", "dbo");
                 });

@@ -20,6 +20,7 @@ namespace PATCHUB.AuthServer.API.Controllers
         {
             _contactRequestRepository = contactRequestRepository;
         }
+      
         [HttpPost("MailSender")]
         public string MailSender([FromBody]MailRequest request)
         {

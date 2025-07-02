@@ -21,12 +21,12 @@ namespace PATCHUB.AuthServer.Persistence.Migrations.AppDb
                 {
                     ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    IdentityNumber = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    IdentityNumber = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    UserName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CountryCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PhoneNo = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    UserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CountryCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNo = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     Mail = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     AddressBill = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     AddressShipping = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -35,7 +35,7 @@ namespace PATCHUB.AuthServer.Persistence.Migrations.AppDb
                     PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Balance = table.Column<decimal>(type: "decimal(18,2)", nullable: false, defaultValue: 0m),
                     UserType = table.Column<int>(type: "int", nullable: false, defaultValue: 100),
-                    ActivatorKey = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ActivatorKey = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ReferenceUser = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     STATUS_CODE = table.Column<int>(type: "int", nullable: false),
                     UPDATE_DATE = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -55,7 +55,8 @@ namespace PATCHUB.AuthServer.Persistence.Migrations.AppDb
                 schema: "dbo",
                 table: "USER",
                 column: "IdentityNumber",
-                unique: true);
+                unique: true,
+                filter: "[IdentityNumber] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_USER_Mail",
@@ -69,7 +70,8 @@ namespace PATCHUB.AuthServer.Persistence.Migrations.AppDb
                 schema: "dbo",
                 table: "USER",
                 column: "PhoneNo",
-                unique: true);
+                unique: true,
+                filter: "[PhoneNo] IS NOT NULL");
         }
 
         /// <inheritdoc />

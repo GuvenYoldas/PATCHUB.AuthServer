@@ -42,36 +42,36 @@ namespace PATCHUB.AuthServer.Infrastructure.AuthTokenService
         {
             if (login == null) throw new ArgumentNullException(nameof(login));
 
-            var user = _userRepository.GetFirst(w => w.Mail == login.Email && w.StatusCode == (int)StatusCode.ACTIVE);
+            var user = await _userRepository.GetFirstAsync(w => w.Mail == login.Email && w.StatusCode == (int)StatusCode.ACTIVE);
 
             if (user == null) return Response<AppToken>.Fail("Email or Password is wrong", 400, true);
 
-            //if (Argon2.VerifyPassword(login.Password, user.PasswordHash, user.SaltString))
-            //{
-            //    return Response<AppToken>.Fail("Email or Password is wrong", 400, true);
-            //}
+            if (!Argon2.VerifyPassword(login.Password, user.PasswordHash, user.SaltString))
+            {
+                return Response<AppToken>.Fail("Email or Password is wrong", 400, true);
+            }
 
             AppUser appUserData = new AppUser
             {
                 Id = user.ID,
-                AddressBill = user.AddressBill,
-                AddressShipping = user.AddressShipping,
-                AvatarUrl = user.AvatarUrl,
+                AddressBill = user.AddressBill ?? "",
+                AddressShipping = user.AddressShipping ?? "",
+                AvatarUrl = user.AvatarUrl ?? "",
                 Balance = user.Balance,
-                CountryCode = user.CountryCode,
-                IdentityNumber = user.IdentityNumber,
-                LastName = user.LastName,
-                Mail = user.Mail,
-                Name = user.Name,
-                PhoneNo = user.PhoneNo,
-                ReferenceUser = user.ReferenceUser,
-                UserName = user.UserName,
+                CountryCode = user.CountryCode ?? "",
+                IdentityNumber = user.IdentityNumber ?? "",
+                LastName = user.LastName ?? "",
+                Mail = user.Mail ?? "",
+                Name = user.Name ?? "",
+                PhoneNo = user.PhoneNo ?? "",
+                ReferenceUser = user.ReferenceUser ?? "",
+                UserName = user.UserName ?? "",
                 UserType = user.UserType
             };
 
             var token = _tokenService.CreateToken(appUserData);
 
-            var userRefreshToken = _userRefreshTokenRepository.GetFirst(x => x.IDUser == user.ID);
+            var userRefreshToken = await _userRefreshTokenRepository.GetFirstAsync(x => x.IDUser == user.ID);
 
             if (userRefreshToken == null)
             {
@@ -104,7 +104,7 @@ namespace PATCHUB.AuthServer.Infrastructure.AuthTokenService
 
         public async Task<Response<AppToken>> CreateTokenByRefreshToken(string refreshToken)
         {
-            var existRefreshToken = _userRefreshTokenRepository.GetFirst(x => x.Token == refreshToken);
+            var existRefreshToken = await _userRefreshTokenRepository.GetFirstAsync(x => x.Token == refreshToken);
 
             if (existRefreshToken == null)
             {
@@ -121,18 +121,18 @@ namespace PATCHUB.AuthServer.Infrastructure.AuthTokenService
             AppUser appUserData = new AppUser
             {
                 Id = user.ID,
-                AddressBill = user.AddressBill,
-                AddressShipping = user.AddressShipping,
-                AvatarUrl = user.AvatarUrl,
+                AddressBill = user.AddressBill ?? "",
+                AddressShipping = user.AddressShipping ?? "",
+                AvatarUrl = user.AvatarUrl ?? "",
                 Balance = user.Balance,
-                CountryCode = user.CountryCode,
-                IdentityNumber = user.IdentityNumber,
-                LastName = user.LastName,
-                Mail = user.Mail,
-                Name = user.Name,
-                PhoneNo = user.PhoneNo,
-                ReferenceUser = user.ReferenceUser,
-                UserName = user.UserName,
+                CountryCode = user.CountryCode ?? "",
+                IdentityNumber = user.IdentityNumber ?? "",
+                LastName = user.LastName ?? "",
+                Mail = user.Mail ?? "",
+                Name = user.Name ?? "",
+                PhoneNo = user.PhoneNo ?? "",
+                ReferenceUser = user.ReferenceUser ?? "",
+                UserName = user.UserName ?? "",
                 UserType = user.UserType
             };
 
@@ -148,7 +148,7 @@ namespace PATCHUB.AuthServer.Infrastructure.AuthTokenService
 
         public async Task<Response<EmptyDto>> RevokeRefreshToken(string refreshToken)
         {
-            var existRefreshToken = _userRefreshTokenRepository.GetFirst(x => x.Token == refreshToken);
+            var existRefreshToken = await _userRefreshTokenRepository.GetFirstAsync(x => x.Token == refreshToken);
 
             if (existRefreshToken != null)
             {

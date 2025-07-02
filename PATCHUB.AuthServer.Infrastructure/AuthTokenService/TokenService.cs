@@ -36,11 +36,24 @@ namespace PATCHUB.AuthServer.Infrastructure.AuthTokenService
 
         private IEnumerable<Claim> GetClaims(AppUser userApp, List<String> audiences)
         {
-            var claims= new List<Claim> {
-            new Claim("id", userApp.Id.ToString()),
-            new Claim("mail", userApp.Mail),
-            new Claim("identityNumber", userApp.IdentityNumber),
-            new Claim("tokenGuid", Guid.NewGuid().ToString())
+            var claims = new List<Claim> {
+                new Claim("id", userApp.Id.ToString()),
+                new Claim("mail", userApp.Mail),
+                new Claim("identityNumber", userApp.IdentityNumber),
+                new Claim("tokenGuid", Guid.NewGuid().ToString()),
+
+                new Claim("name", userApp.Name ?? ""),
+                new Claim("lastName", userApp.LastName ?? ""),
+                new Claim("userName", userApp.UserName ?? ""),
+                new Claim("countryCode", userApp.CountryCode ?? ""),
+                new Claim("phoneNo", userApp.PhoneNo ?? ""),
+                new Claim("addressBill", userApp.AddressBill ?? ""),
+                new Claim("addressShipping", userApp.AddressShipping ?? ""),
+                new Claim("avatarUrl", userApp.AvatarUrl ?? ""),
+                new Claim("balance", userApp.Balance.ToString("N2") ?? "0,00"),
+                new Claim("userType", userApp.UserType.ToString()),
+                new Claim("referenceUser", userApp.ReferenceUser)
+            
             };
 
             claims.AddRange(audiences.Select(x => new Claim(JwtRegisteredClaimNames.Aud, x)));
