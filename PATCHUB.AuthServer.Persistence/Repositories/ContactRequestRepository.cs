@@ -31,7 +31,7 @@ namespace PATCHUB.AuthServer.Persistence.Repositories
                 var affectedRows = _context.Database.ExecuteSqlRaw(sql,
                     new SqlParameter("@FullName", entity.FullName),
                     new SqlParameter("@Mail", entity.Mail),
-                    new SqlParameter("@CreatedDate", DateTime.Now),
+                    new SqlParameter("@CreatedDate", DateTime.UtcNow),
                     new SqlParameter("@MessageText", entity.MessageText),
                     new SqlParameter("@Location", entity.Location));
 

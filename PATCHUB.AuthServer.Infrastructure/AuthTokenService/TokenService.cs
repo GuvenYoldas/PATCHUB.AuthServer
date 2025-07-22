@@ -74,8 +74,8 @@ namespace PATCHUB.AuthServer.Infrastructure.AuthTokenService
 
         public AppToken CreateToken(AppUser userApp)
         {
-            var accessTokenExpiration = DateTime.Now.AddMinutes(_tokenOption.AccessTokenExpiration);
-            var refreshTokenExpiration = DateTime.Now.AddMinutes(_tokenOption.RefreshTokenExpiration);
+            var accessTokenExpiration = DateTime.UtcNow.AddMinutes(_tokenOption.AccessTokenExpiration);
+            var refreshTokenExpiration = DateTime.UtcNow.AddMinutes(_tokenOption.RefreshTokenExpiration);
             var securityKey = SignService.GetSymmetricSecurityKey(_tokenOption.SecurityKey);
 
             SigningCredentials signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha512Signature);
@@ -83,7 +83,7 @@ namespace PATCHUB.AuthServer.Infrastructure.AuthTokenService
             JwtSecurityToken jwtSecurityToken = new JwtSecurityToken(
                 issuer: _tokenOption.Issuer,
                 expires: accessTokenExpiration,
-                 notBefore: DateTime.Now,
+                 notBefore: DateTime.UtcNow,
                  claims: GetClaims(userApp, _tokenOption.Audience),
                  signingCredentials: signingCredentials);
 
@@ -104,7 +104,7 @@ namespace PATCHUB.AuthServer.Infrastructure.AuthTokenService
 
         public AppTokenClient CreateTokenByClient(Client client)
         {
-            var accessTokenExpiration = DateTime.Now.AddMinutes(_tokenOption.AccessTokenExpiration);
+            var accessTokenExpiration = DateTime.UtcNow.AddMinutes(_tokenOption.AccessTokenExpiration);
 
             var securityKey = SignService.GetSymmetricSecurityKey(_tokenOption.SecurityKey);
 
@@ -113,7 +113,7 @@ namespace PATCHUB.AuthServer.Infrastructure.AuthTokenService
             JwtSecurityToken jwtSecurityToken = new JwtSecurityToken(
                 issuer: _tokenOption.Issuer,
                 expires: accessTokenExpiration,
-                 notBefore: DateTime.Now,
+                 notBefore: DateTime.UtcNow,
                  claims: GetClaimsByClient(client),
                  signingCredentials: signingCredentials);
 

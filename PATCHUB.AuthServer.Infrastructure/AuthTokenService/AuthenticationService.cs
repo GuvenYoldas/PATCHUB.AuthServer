@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Azure.Core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using PATCHUB.AuthServer.Application.Dtos;
@@ -40,6 +41,10 @@ namespace PATCHUB.AuthServer.Infrastructure.AuthTokenService
 
         public async Task<Response<AppToken>> CreateTokenAsync(AppLogin login)
         {
+      
+            //var clientId = context.Request.Headers["Client-Id"].FirstOrDefault();
+            //var clientSecret = context.Request.Headers["Client-Secret"].FirstOrDefault();
+
             if (login == null) throw new ArgumentNullException(nameof(login));
 
             var user = await _userRepository.GetFirstAsync(w => w.Mail == login.Email && w.StatusCode == (int)StatusCode.ACTIVE);
