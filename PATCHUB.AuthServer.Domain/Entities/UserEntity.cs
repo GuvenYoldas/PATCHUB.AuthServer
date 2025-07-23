@@ -30,5 +30,6 @@ namespace PATCHUB.AuthServer.Domain.Entities
         public string? ActivatorKey { get; set; }
         public string? ReferenceUser { get; set; }
 
+
     }
 }

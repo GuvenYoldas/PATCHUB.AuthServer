@@ -7,17 +7,17 @@ using System.Threading.Tasks;
 
 namespace PATCHUB.AuthServer.Domain.Entities
 {
-    public class ClientRateLimitPolicyEntity
+    public class ClientRateLimitPolicyEntity : BaseEntity<int>
     {
-        public int Id { get; set; }
-        public string ClientId { get; set; } // FK olacak
+        public int ID { get; set; }
+        public string IDClient { get; set; } // FK olacak
         public int MaxRequestsPerMinute { get; set; }
         public int MaxRequestsPerHour { get; set; }
         public int MaxRequestsPerDay { get; set; }
-        public string AllowedIPsJson { get; set; }
         public DateTime LastUpdated { get; set; } = DateTime.UtcNow;
 
         // Navigation
         public ClientCredential Client { get; set; }
+        public ICollection<ClientAllowedIpEntity> AllowedIps { get; set; }
     }
 }

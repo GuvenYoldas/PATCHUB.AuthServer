@@ -17,6 +17,8 @@ namespace PATCHUB.AuthServer.Domain.Entities
         public bool IsRevoked { get; set; } = false; // Token silindi mi, geçersiz mi?
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        public ClientCredential Client { get; set; }
     }
 
 }

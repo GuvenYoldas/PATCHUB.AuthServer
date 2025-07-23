@@ -15,8 +15,13 @@ namespace PATCHUB.AuthServer.Persistence.Configurations
             builder.HasNoKey();
 
             builder.Property(x => x.IDUser).IsRequired();
-            builder.Property(x => x.Token).IsRequired().HasMaxLength(200);
+            builder.Property(x => x.Token).IsRequired().HasMaxLength(512);
             builder.Property(x => x.ExpirationDate).IsRequired();
+
+            builder.HasOne(x => x.Client)
+                .WithMany()
+                .HasForeignKey(x => x.IDClient)
+                .HasPrincipalKey(c => c.IDClient);
 
         }
     }

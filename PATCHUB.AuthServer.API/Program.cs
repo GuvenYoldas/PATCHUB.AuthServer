@@ -1,6 +1,5 @@
 using PATCHUB.AuthServer.Persistence;
 using PATCHUB.AuthServer.Infrastructure;
-using Microsoft.Extensions.Configuration;
 using PATCHUB.AuthServer.Persistence.Configurations;
 using PATCHUB.SharedLibrary.Dtos;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -59,7 +58,11 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Patchub SafeSign v1");
+        c.RoutePrefix = string.Empty; // root'a alýr
+    });
 }
 
 
