@@ -13,8 +13,8 @@ namespace PATCHUB.AuthServer.Persistence.Configurations
             builder.Property(x => x.IDUser).IsRequired();
             builder.Property(x => x.IP).HasMaxLength(45);
             builder.Property(x => x.UserAgent).HasMaxLength(500);
+            builder.Property(x => x.LoginDate).HasDefaultValueSql("GETUTCDATE()");
 
-            
         }
     }
 }

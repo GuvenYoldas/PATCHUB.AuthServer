@@ -12,6 +12,8 @@ namespace PATCHUB.AuthServer.Persistence.Configurations
 
             builder.Property(x => x.Token).IsRequired().HasMaxLength(2000);
             builder.Property(x => x.Reason).HasMaxLength(200);
+            builder.Property(x => x.RevokedAt).HasDefaultValueSql("GETUTCDATE()");
+
         }
     }
 }
