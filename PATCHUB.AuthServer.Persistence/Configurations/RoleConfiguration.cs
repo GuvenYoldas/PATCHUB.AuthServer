@@ -16,11 +16,11 @@ namespace PATCHUB.AuthServer.Persistence.Configurations
             // Client FK
             builder.HasOne(x => x.Client)
                 .WithMany()
-                .HasForeignKey(x => x.IDClient)
+                .HasForeignKey(x => x.IDClientCredential)
                 .OnDelete(DeleteBehavior.Restrict); // Client silinirse rol silinmesin
 
             // Index (Opsiyonel ama önerilir)
-            builder.HasIndex(x => new { x.IDClient, x.Name })
+            builder.HasIndex(x => new { x.IDClientCredential, x.Name })
                    .IsUnique(); // Aynı client içinde aynı rol ismi bir kez tanımlanmalı
         }
     }

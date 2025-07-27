@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PATCHUB.AuthServer.Persistence.Context;
 
@@ -11,9 +12,11 @@ using PATCHUB.AuthServer.Persistence.Context;
 namespace PATCHUB.AuthServer.Persistence.Migrations.AuthDb
 {
     [DbContext(typeof(AuthDbContext))]
-    partial class AuthDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250726075729_auth-client-and-log-tables")]
+    partial class authclientandlogtables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -37,11 +40,9 @@ namespace PATCHUB.AuthServer.Persistence.Migrations.AuthDb
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<DateTime>("CreateDate")
-                        .ValueGeneratedOnAdd()
+                    b.Property<DateTime?>("CreateDate")
                         .HasColumnType("datetime2")
-                        .HasColumnName("CREATE_DATE")
-                        .HasDefaultValueSql("GETUTCDATE()");
+                        .HasColumnName("CREATE_DATE");
 
                     b.Property<string>("CreateIp")
                         .HasColumnType("nvarchar(max)")
@@ -111,11 +112,9 @@ namespace PATCHUB.AuthServer.Persistence.Migrations.AuthDb
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
-                    b.Property<DateTime>("CreateDate")
-                        .ValueGeneratedOnAdd()
+                    b.Property<DateTime?>("CreateDate")
                         .HasColumnType("datetime2")
-                        .HasColumnName("CREATE_DATE")
-                        .HasDefaultValueSql("GETUTCDATE()");
+                        .HasColumnName("CREATE_DATE");
 
                     b.Property<string>("CreateIp")
                         .HasColumnType("nvarchar(max)")
@@ -125,7 +124,7 @@ namespace PATCHUB.AuthServer.Persistence.Migrations.AuthDb
                         .HasColumnType("int")
                         .HasColumnName("CREATE_USERID");
 
-                    b.Property<int>("IDRateLimitPolicy")
+                    b.Property<int>("IDPolicy")
                         .HasColumnType("int");
 
                     b.Property<string>("IpAddress")
@@ -151,7 +150,7 @@ namespace PATCHUB.AuthServer.Persistence.Migrations.AuthDb
 
                     b.HasKey("ID");
 
-                    b.HasIndex("IDRateLimitPolicy");
+                    b.HasIndex("IDPolicy");
 
                     b.ToTable("CLIENT_ALLOWED_IP", (string)null);
                 });
@@ -166,11 +165,9 @@ namespace PATCHUB.AuthServer.Persistence.Migrations.AuthDb
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
-                    b.Property<DateTime>("CreateDate")
-                        .ValueGeneratedOnAdd()
+                    b.Property<DateTime?>("CreateDate")
                         .HasColumnType("datetime2")
-                        .HasColumnName("CREATE_DATE")
-                        .HasDefaultValueSql("GETUTCDATE()");
+                        .HasColumnName("CREATE_DATE");
 
                     b.Property<string>("CreateIp")
                         .HasColumnType("nvarchar(max)")
@@ -231,11 +228,9 @@ namespace PATCHUB.AuthServer.Persistence.Migrations.AuthDb
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
-                    b.Property<DateTime>("CreateDate")
-                        .ValueGeneratedOnAdd()
+                    b.Property<DateTime?>("CreateDate")
                         .HasColumnType("datetime2")
-                        .HasColumnName("CREATE_DATE")
-                        .HasDefaultValueSql("GETUTCDATE()");
+                        .HasColumnName("CREATE_DATE");
 
                     b.Property<string>("CreateIp")
                         .HasColumnType("nvarchar(max)")
@@ -340,11 +335,9 @@ namespace PATCHUB.AuthServer.Persistence.Migrations.AuthDb
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
-                    b.Property<DateTime>("CreateDate")
-                        .ValueGeneratedOnAdd()
+                    b.Property<DateTime?>("CreateDate")
                         .HasColumnType("datetime2")
-                        .HasColumnName("CREATE_DATE")
-                        .HasDefaultValueSql("GETUTCDATE()");
+                        .HasColumnName("CREATE_DATE");
 
                     b.Property<string>("CreateIp")
                         .HasColumnType("nvarchar(max)")
@@ -395,11 +388,9 @@ namespace PATCHUB.AuthServer.Persistence.Migrations.AuthDb
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
-                    b.Property<DateTime>("CreateDate")
-                        .ValueGeneratedOnAdd()
+                    b.Property<DateTime?>("CreateDate")
                         .HasColumnType("datetime2")
-                        .HasColumnName("CREATE_DATE")
-                        .HasDefaultValueSql("GETUTCDATE()");
+                        .HasColumnName("CREATE_DATE");
 
                     b.Property<string>("CreateIp")
                         .HasColumnType("nvarchar(max)")
@@ -483,9 +474,7 @@ namespace PATCHUB.AuthServer.Persistence.Migrations.AuthDb
             modelBuilder.Entity("PATCHUB.AuthServer.Domain.Entities.UserRefreshTokenEntity", b =>
                 {
                     b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETUTCDATE()");
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime>("ExpirationDate")
                         .HasColumnType("datetime2");
@@ -519,11 +508,9 @@ namespace PATCHUB.AuthServer.Persistence.Migrations.AuthDb
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
-                    b.Property<DateTime>("CreateDate")
-                        .ValueGeneratedOnAdd()
+                    b.Property<DateTime?>("CreateDate")
                         .HasColumnType("datetime2")
-                        .HasColumnName("CREATE_DATE")
-                        .HasDefaultValueSql("GETUTCDATE()");
+                        .HasColumnName("CREATE_DATE");
 
                     b.Property<string>("CreateIp")
                         .HasColumnType("nvarchar(max)")
@@ -566,7 +553,7 @@ namespace PATCHUB.AuthServer.Persistence.Migrations.AuthDb
                 {
                     b.HasOne("PATCHUB.AuthServer.Domain.Entities.ClientRateLimitPolicyEntity", "Policy")
                         .WithMany("AllowedIps")
-                        .HasForeignKey("IDRateLimitPolicy")
+                        .HasForeignKey("IDPolicy")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 

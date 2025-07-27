@@ -9,7 +9,7 @@ namespace PATCHUB.AuthServer.Domain.Entities
 {
     public class ClientRateLimitPolicyEntity : BaseEntity<int>
     {
-        public Guid IDClient { get; set; } // FK olacak
+        public int IDClientCredential { get; set; } // FK olacak
         public int MaxRequestsPerMinute { get; set; }
         public int MaxRequestsPerHour { get; set; }
         public int MaxRequestsPerDay { get; set; }

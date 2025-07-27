@@ -29,8 +29,8 @@ namespace PATCHUB.AuthServer.Domain.Entities.Base
         public string? UpdateIp { get; set; }
 
         [Column("CREATE_DATE")]
-        public DateTime? CreateDate { get; set; }
-        
+        public DateTime CreateDate { get; set; } = DateTime.UtcNow;
+
         [Column("CREATE_USERID")]
         public int? CreateUserId { get; set; }
         

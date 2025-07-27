@@ -9,6 +9,7 @@ namespace PATCHUB.AuthServer.Persistence.Configurations
         public void Configure(EntityTypeBuilder<TokenBlacklistEntity> builder)
         {
             builder.ToTable("TOKEN_BLACKLIST");
+            builder.HasNoKey();
 
             builder.Property(x => x.Token).IsRequired().HasMaxLength(2000);
             builder.Property(x => x.Reason).HasMaxLength(200);

@@ -16,7 +16,7 @@ namespace PATCHUB.AuthServer.Persistence.Configurations
 
             builder.HasOne(x => x.Policy)
                    .WithMany(p => p.AllowedIps)
-                   .HasForeignKey(x => x.IDPolicy)
+                   .HasForeignKey(x => x.IDRateLimitPolicy)
                    .OnDelete(DeleteBehavior.Cascade);
         }
     }

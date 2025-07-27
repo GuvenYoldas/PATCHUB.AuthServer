@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using PATCHUB.AuthServer.Domain.Entities;
 using PATCHUB.AuthServer.Persistence.Configurations;
+using PATCHUB.AuthServer.Persistence.Configurations.Base;
 
 namespace PATCHUB.AuthServer.Persistence.Context
 {
@@ -32,8 +33,20 @@ namespace PATCHUB.AuthServer.Persistence.Context
             //builder.ApplyConfigurationsFromAssembly(GetType().Assembly);
 
             // Manuel ekleme
-            builder.ApplyConfiguration(new UserRefreshTokenConfiguration());
+
+            builder.ApplyConfiguration(new ApiUsageLogConfiguration());
+            builder.ApplyConfiguration(new ClientAllowedIpConfiguration());
+            builder.ApplyConfiguration(new ClientCredentialConfiguration());
+            builder.ApplyConfiguration(new ClientRateLimitPolicyConfiguration());
             builder.ApplyConfiguration(new ContactRequestConfiguration());
+            builder.ApplyConfiguration(new LoginHistoryConfiguration());
+            builder.ApplyConfiguration(new PermissionConfiguration());
+            builder.ApplyConfiguration(new RoleConfiguration());
+            builder.ApplyConfiguration(new RolePermissionConfiguration());
+            builder.ApplyConfiguration(new TokenBlacklistConfiguration());
+            builder.ApplyConfiguration(new UserRefreshTokenConfiguration());
+            builder.ApplyConfiguration(new UserRoleConfiguration());
+
             #endregion
 
             // foreignkey kaybı varsa, verileri manuel silme ayarı!
@@ -46,6 +59,7 @@ namespace PATCHUB.AuthServer.Persistence.Context
                 fk.DeleteBehavior = DeleteBehavior.Restrict;
             }
 
+            builder.ApplyGlobalEntityConfigurations();
             base.OnModelCreating(builder);
         }
     }

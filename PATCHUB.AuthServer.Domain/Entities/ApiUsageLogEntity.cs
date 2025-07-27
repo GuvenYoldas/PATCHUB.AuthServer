@@ -9,7 +9,7 @@ namespace PATCHUB.AuthServer.Domain.Entities
 {
     public class ApiUsageLogEntity: BaseEntity<int>
     {
-        public Guid IDClient { get; set; }
+        public int IDClientCredential { get; set; }
         public int? IDUser { get; set; }
         // public string Token { get; set; } = null!; TOKEN loglamak riski!
         public string Method { get; set; } = null!;

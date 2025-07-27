@@ -9,7 +9,8 @@ namespace PATCHUB.AuthServer.Persistence.Configurations
         public void Configure(EntityTypeBuilder<LoginHistoryEntity> builder)
         {
             builder.ToTable("LOGIN_HISTORY");
-
+            builder.HasNoKey();
+            builder.Property(x => x.IDClientCredential).IsRequired();
             builder.Property(x => x.IDUser).IsRequired();
             builder.Property(x => x.IP).HasMaxLength(45);
             builder.Property(x => x.UserAgent).HasMaxLength(500);

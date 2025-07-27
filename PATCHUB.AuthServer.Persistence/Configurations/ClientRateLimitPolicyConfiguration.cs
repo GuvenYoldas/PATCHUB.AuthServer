@@ -12,7 +12,7 @@ namespace PATCHUB.AuthServer.Persistence.Configurations
 
             builder.HasKey(x => x.ID);
 
-            builder.Property(x => x.IDClient).IsRequired();
+            builder.Property(x => x.IDClientCredential).IsRequired();
             builder.Property(x => x.MaxRequestsPerMinute).IsRequired();
             builder.Property(x => x.MaxRequestsPerHour).IsRequired();
             builder.Property(x => x.MaxRequestsPerDay).IsRequired();
@@ -20,13 +20,13 @@ namespace PATCHUB.AuthServer.Persistence.Configurations
 
             builder.HasOne(x => x.Client)
                    .WithMany(c => c.RateLimitPolicies)
-                   .HasForeignKey(x => x.IDClient)
-                   .HasPrincipalKey(c => c.IDClient)
+                   .HasForeignKey(x => x.IDClientCredential)
+                   .HasPrincipalKey(c => c.ID)
                    .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasMany(x => x.AllowedIps)
                    .WithOne(x => x.Policy)
-                   .HasForeignKey(x => x.IDPolicy);
+                   .HasForeignKey(x => x.IDRateLimitPolicy);
         }
     }
 }

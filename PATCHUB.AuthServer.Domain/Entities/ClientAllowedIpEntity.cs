@@ -2,9 +2,9 @@
 
 namespace PATCHUB.AuthServer.Domain.Entities
 {
-    public class ClientAllowedIpEntity : BaseEntity
+    public class ClientAllowedIpEntity : BaseEntity<int>
     {
-        public int IDPolicy { get; set; } // Foreign key to ClientRateLimitPolicyEntity
+        public int IDRateLimitPolicy { get; set; } // Foreign key to ClientRateLimitPolicyEntity
         public string IpAddress { get; set; }
 
         public ClientRateLimitPolicyEntity Policy { get; set; }

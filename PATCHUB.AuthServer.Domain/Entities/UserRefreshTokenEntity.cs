@@ -12,7 +12,7 @@ namespace PATCHUB.AuthServer.Domain.Entities
         public int IDUser { get; set; }
         public string Token { get; set; }
         public DateTime ExpirationDate { get; set; }
-        public Guid IDClient { get; set; } // Refresh token hangi client'a ait?
+        public int IDClientCredential { get; set; } // Refresh token hangi client'a ait?
 
         public bool IsRevoked { get; set; } = false; // Token silindi mi, geçersiz mi?
 

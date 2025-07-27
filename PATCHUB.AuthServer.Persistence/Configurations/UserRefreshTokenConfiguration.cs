@@ -17,11 +17,12 @@ namespace PATCHUB.AuthServer.Persistence.Configurations
             builder.Property(x => x.IDUser).IsRequired();
             builder.Property(x => x.Token).IsRequired().HasMaxLength(512);
             builder.Property(x => x.ExpirationDate).IsRequired();
+            builder.Property(x => x.CreatedAt).HasDefaultValueSql("GETUTCDATE()"); ;
 
             builder.HasOne(x => x.Client)
                 .WithMany()
-                .HasForeignKey(x => x.IDClient)
-                .HasPrincipalKey(c => c.IDClient);
+                .HasForeignKey(x => x.IDClientCredential)
+                .HasPrincipalKey(c => c.ID);
 
         }
     }
