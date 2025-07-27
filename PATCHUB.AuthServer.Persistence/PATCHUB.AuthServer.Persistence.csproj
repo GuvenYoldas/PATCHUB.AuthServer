@@ -6,4 +6,34 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Konscious.Security.Cryptography.Argon2" Version="1.3.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PATCHUB.AuthServer.Application\PATCHUB.AuthServer.Application.csproj" />
+    <ProjectReference Include="..\PATCHUB.AuthServer.Domain\PATCHUB.AuthServer.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="PATCHUB.SharedLibrary">
+      <HintPath>..\..\PATCHUB.SharedLibrary\PATCHUB.SharedLibrary\bin\Debug\net8.0\PATCHUB.SharedLibrary.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

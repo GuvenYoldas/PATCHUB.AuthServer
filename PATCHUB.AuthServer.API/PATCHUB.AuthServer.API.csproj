@@ -1,9 +1,26 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.12" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PATCHUB.AuthServer.Domain\PATCHUB.AuthServer.Domain.csproj" />
+    <ProjectReference Include="..\PATCHUB.AuthServer.Infrastructure\PATCHUB.AuthServer.Infrastructure.csproj" />
+    <ProjectReference Include="..\PATCHUB.AuthServer.Persistence\PATCHUB.AuthServer.Persistence.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="PATCHUB.SharedLibrary">
+      <HintPath>..\..\PATCHUB.SharedLibrary\PATCHUB.SharedLibrary\bin\Debug\net8.0\PATCHUB.SharedLibrary.dll</HintPath>
+    </Reference>
+  </ItemGroup>
 
 </Project>
