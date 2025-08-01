@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using PATCHUB.AuthServer.Domain.Repositories.Base;
 using PATCHUB.AuthServer.Persistence.Context;
 
-namespace PATCHUB.AuthServer.Persistence.UnitOfWorks
+namespace PATCHUB.AuthServer.Persistence.Repositories.Base
 {
-    public sealed class UnitOfWork<TContext> : IDisposable where TContext : DbContext
+    public sealed class UnitOfWork<TContext> : IUnitOfWork where TContext : DbContext
     {
         private TContext _context;
 

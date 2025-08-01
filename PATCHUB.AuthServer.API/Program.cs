@@ -4,15 +4,22 @@ using PATCHUB.AuthServer.Persistence.Configurations;
 using PATCHUB.SharedLibrary.Dtos;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using PATCHUB.SharedLibrary.Services;
+using PATCHUB.SharedLibrary.ErrorHandling.Middleware;
+using PATCHUB.SharedLibrary.ErrorHandling;
+using PATCHUB.SharedLibrary.Abstractions;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
+
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<IClientCredentialAccessor, ClientCredentialAccessor>();
+
 builder.Services.AddPersistenceServices(builder.Configuration);
 builder.Services.AddInfrastructureServices(builder.Configuration);
-
+builder.Services.AddExceptionHandling();
 
 builder.Services.Configure<CustomTokenOption>(builder.Configuration.GetSection("TokenOption"));
 builder.Services.Configure<List<Client>>(builder.Configuration.GetSection("Clients"));
@@ -65,6 +72,8 @@ if (app.Environment.IsDevelopment())
     });
 }
 
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.UseHttpsRedirection();
 app.UseCors("AllowAllFrontend");

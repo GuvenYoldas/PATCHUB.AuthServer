@@ -7,7 +7,9 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using PATCHUB.AuthServer.Domain.Entities.Base;
 using PATCHUB.AuthServer.Domain.Enumeration;
+using PATCHUB.AuthServer.Domain.Repositories.Base;
 using PATCHUB.AuthServer.Persistence.Context;
+using PATCHUB.SharedLibrary.Abstractions;
 
 namespace PATCHUB.AuthServer.Persistence.Repositories.Base
 {
@@ -266,31 +268,40 @@ namespace PATCHUB.AuthServer.Persistence.Repositories.Base
         }
     }
 
-    public abstract class GenericRepository<TEntity, TKey> where TEntity : BaseEntity<TKey>
+    public abstract class GenericRepository<TEntity, TKey> : IGenericRepository<TEntity, TKey>
+    where TEntity : BaseEntity<TKey>
     {
         //protected readonly DbContext _context;
         protected readonly DbContext _context;
+        protected readonly IClientCredentialAccessor _clientCredentialAccessor;
 
-        public GenericRepository(DbContext context)
+        public GenericRepository(DbContext context, IClientCredentialAccessor clientCredentialAccessor)
         {
             _context = context;
+            _clientCredentialAccessor = clientCredentialAccessor;
         }
 
         public virtual void Create(TEntity entity)
         {
             entity.CreateDate = DateTime.UtcNow;
+            entity.CreateIp = _clientCredentialAccessor?.ClientIp;
+            entity.CreateUserId = _clientCredentialAccessor?.UserId;
             _context.Set<TEntity>().Add(entity);
         }
 
         public TEntity Created(TEntity entity)
         {
             entity.CreateDate = DateTime.UtcNow;
+            entity.CreateIp = _clientCredentialAccessor?.ClientIp;
+            entity.CreateUserId = _clientCredentialAccessor?.UserId;
             _context.Set<TEntity>().Add(entity);
             return entity;
         }
         public virtual void Update(TEntity entity)
         {
             entity.UpdateDate = DateTime.UtcNow;
+            entity.UpdateIp = _clientCredentialAccessor?.ClientIp;
+            entity.UpdateUserId = _clientCredentialAccessor?.UserId;
             _context.Set<TEntity>().Attach(entity);
             _context.Entry(entity).State = EntityState.Modified;
         }
@@ -335,6 +346,8 @@ namespace PATCHUB.AuthServer.Persistence.Repositories.Base
         public void SoftDelete(TEntity entity)
         {
             entity.UpdateDate = DateTime.UtcNow;
+            entity.UpdateIp = _clientCredentialAccessor?.ClientIp;
+            entity.UpdateUserId = _clientCredentialAccessor?.UserId;
             entity.StatusCode = (int)StatusCode.PASSIVE;
             Update(entity);
         }
@@ -346,6 +359,8 @@ namespace PATCHUB.AuthServer.Persistence.Repositories.Base
             foreach (var entity in entities)
             {
                 entity.UpdateDate = DateTime.UtcNow;
+                entity.UpdateIp = _clientCredentialAccessor?.ClientIp;
+                entity.UpdateUserId = _clientCredentialAccessor?.UserId;
                 entity.StatusCode = (int)StatusCode.PASSIVE;
                 Update(entity);
             }
@@ -565,7 +580,7 @@ namespace PATCHUB.AuthServer.Persistence.Repositories.Base
 
         {
             TEntity query = null;
-             
+
 
             if (isActive == true)
             {
@@ -575,7 +590,7 @@ namespace PATCHUB.AuthServer.Persistence.Repositories.Base
             {
                 query = await _context.Set<TEntity>().FindAsync(id);
             }
-                return query;
+            return query;
         }
 
         public virtual int GetCount(

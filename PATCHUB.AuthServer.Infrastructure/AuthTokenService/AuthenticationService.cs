@@ -10,7 +10,10 @@ using PATCHUB.AuthServer.Application.Dtos;
 using PATCHUB.AuthServer.Domain.Enumeration;
 using PATCHUB.AuthServer.Persistence.Configurations;
 using PATCHUB.AuthServer.Persistence.Repositories;
+using PATCHUB.SharedLibrary.Abstractions;
 using PATCHUB.SharedLibrary.Dtos;
+using PATCHUB.SharedLibrary.ErrorHandling.Exceptions;
+using PATCHUB.SharedLibrary.ErrorHandling.Mappers;
 using PATCHUB.SharedLibrary.Helpers;
 
 namespace PATCHUB.AuthServer.Infrastructure.AuthTokenService
@@ -25,8 +28,11 @@ namespace PATCHUB.AuthServer.Infrastructure.AuthTokenService
 
         private readonly UserRepository _userRepository;
         private readonly UserRefreshTokenRepository _userRefreshTokenRepository;
+        private readonly ClientCredentialRepository _clientCredentialRepository;
+        private readonly IClientCredentialAccessor _clientCredentialAccessor;
+
         public AuthenticationService(IOptions<List<Client>> optionsClient, TokenService tokenService, //UserManager<UserApp> userManager, IUnitOfWork unitOfWork, IGenericRepository<UserRefreshToken> userRefreshTokenService
-            UserRepository userRepository, UserRefreshTokenRepository userRefreshTokenRepository)
+            UserRepository userRepository, UserRefreshTokenRepository userRefreshTokenRepository, IClientCredentialAccessor clientCredentialAccessor)
         {
             _clients = optionsClient.Value;
 
@@ -37,23 +43,33 @@ namespace PATCHUB.AuthServer.Infrastructure.AuthTokenService
 
             _userRepository = userRepository;
             _userRefreshTokenRepository = userRefreshTokenRepository;
+
+            _clientCredentialAccessor = clientCredentialAccessor;
         }
 
         public async Task<Response<AppToken>> CreateTokenAsync(AppLogin login)
         {
-      
-            //var clientId = context.Request.Headers["Client-Id"].FirstOrDefault();
-            //var clientSecret = context.Request.Headers["Client-Secret"].FirstOrDefault();
+            if (string.IsNullOrEmpty(_clientCredentialAccessor.ClientId) || string.IsNullOrEmpty(_clientCredentialAccessor.ClientSecret)) throw new BadRequestException("Client Bilgileri boş!");
 
-            if (login == null) throw new ArgumentNullException(nameof(login));
+            var clientId = Guid.TryParse(_clientCredentialAccessor.ClientId, out var parsed) ? parsed : (Guid?)null;
+            var clientSecret = _clientCredentialAccessor.ClientSecret;
+
+            if(clientId == null) throw new AuthenticationException("Client veya Giriş Bilgileri hatalı!");
+
+
+            var clientCredential = await _clientCredentialRepository.GetFirstAsync(w => w.IDClient == clientId && w.SecretHash == clientSecret && w.StatusCode == (int)StatusCode.ACTIVE && w.ExpirationDate > DateTime.UtcNow && w.RequestLimit > w.RequestCount);
+            if (clientCredential == null) throw new AuthenticationException("Client veya Giriş Bilgileri hatalı!");
+
+            
+            if (login == null) throw new BadRequestException("Giriş Bilgileri boş!");
 
             var user = await _userRepository.GetFirstAsync(w => w.Mail == login.Email && w.StatusCode == (int)StatusCode.ACTIVE);
 
-            if (user == null) return Response<AppToken>.Fail("Email or Password is wrong", 400, true);
+            if (user == null) throw new AuthenticationException("Client veya Giriş Bilgileri hatalı!");
 
             if (!Argon2.VerifyPassword(login.Password, user.PasswordHash, user.SaltString))
             {
-                return Response<AppToken>.Fail("Email or Password is wrong", 400, true);
+                throw new AuthenticationException("Client veya Giriş Bilgileri hatalı!");
             }
 
             AppUser appUserData = new AppUser
@@ -92,6 +108,7 @@ namespace PATCHUB.AuthServer.Infrastructure.AuthTokenService
 
             return Response<AppToken>.Success(token, 200);
         }
+
 
         public Response<AppTokenClient> CreateTokenByClient(AppLoginClient clientLoginDto)
         {

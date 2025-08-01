@@ -6,4 +6,14 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\PATCHUB.AuthServer.Domain\PATCHUB.AuthServer.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="PATCHUB.SharedLibrary">
+      <HintPath>..\..\PATCHUB.SharedLibrary\PATCHUB.SharedLibrary\bin\Debug\net8.0\PATCHUB.SharedLibrary.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

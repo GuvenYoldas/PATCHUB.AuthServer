@@ -6,9 +6,10 @@ using System.Text;
 using System.Threading.Tasks;
 using PATCHUB.AuthServer.Application.Dtos;
 using PATCHUB.AuthServer.Domain.Entities;
-using PATCHUB.AuthServer.Domain.Entities.Base;
+using PATCHUB.AuthServer.Domain.Enumeration;
 using PATCHUB.AuthServer.Persistence.Context;
 using PATCHUB.AuthServer.Persistence.Repositories.Base;
+using PATCHUB.SharedLibrary.Abstractions;
 using PATCHUB.SharedLibrary.Helpers;
 
 namespace PATCHUB.AuthServer.Persistence.Repositories
@@ -16,7 +17,7 @@ namespace PATCHUB.AuthServer.Persistence.Repositories
     public class UserRepository : GenericRepository<UserEntity, int>
     {
         protected readonly AppDbContext _context;
-        public UserRepository(AppDbContext context) : base(context)
+        public UserRepository(AppDbContext context, IClientCredentialAccessor accessor) : base(context, accessor)
         {
             _context = context;
         }
@@ -35,7 +36,7 @@ namespace PATCHUB.AuthServer.Persistence.Repositories
                 PasswordHash = passHass,
                 ReferenceUser = input.ReferenceUser?.Trim(),
                 SaltString = saltStr,
-                StatusCode = 200
+                StatusCode = (int)StatusCode.WAITING_APPROVE
             };
 
 

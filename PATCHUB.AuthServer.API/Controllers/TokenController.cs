@@ -30,31 +30,12 @@ namespace PATCHUB.AuthServer.API.Controllers
         }
 
         [HttpPost("CreateTokenAsync")]
-        public Response<AppToken> CreateTokenAsync([FromBody] AppLogin request)
+        public async Task<Response<AppToken>> CreateTokenAsync([FromBody] AppLogin request)
         {
-            try
-            {
-
-                var clientId = Request.Headers["Client-Id"].FirstOrDefault();
-                var clientSecret = Request.Headers["Client-Secret"].FirstOrDefault();
-
-                //var test0 = _userRefreshTokenRepository.GetCount();
-                //var test1 = _userRefreshTokenRepository.GetAll();
-                //var test2 = _userRefreshTokenRepository.Get(w => w.IDUser == 3).FirstOrDefault();
-
-                ////_userRefreshTokenRepository.Insert(new Domain.Entities.UserRefreshTokenEntity { IDUser = 6, Token = "deneme ALP#", ExpirationDate = DateTime.Now});
-                //_userRefreshTokenRepository.Delete(test2);
-
-                return _authenticationService.CreateTokenAsync(new Application.Dtos.AppLogin { Email = "alp.yoldas@gmail.com", Password = "1q2w3e4r5t6y7u8ı9o_!#" }).Result;
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
+            return await _authenticationService.CreateTokenAsync(new Application.Dtos.AppLogin { Email = "alp.yoldas@gmail.com", Password = "1q2w3e4r5t6y7u8ı9o_!#" });
+            //return await _authenticationService.CreateTokenAsync(new Application.Dtos.AppLogin { Email = request.Email, Password = request.Password });
 
         }
-
 
         [Authorize]
         [HttpGet("CreateTokenByRefreshToken")]

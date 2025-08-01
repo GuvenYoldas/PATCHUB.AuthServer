@@ -10,6 +10,7 @@ using PATCHUB.AuthServer.Domain.Entities;
 using PATCHUB.AuthServer.Domain.Entities.Base;
 using PATCHUB.AuthServer.Persistence.Context;
 using PATCHUB.AuthServer.Persistence.Repositories.Base;
+using PATCHUB.SharedLibrary.ErrorHandling.Exceptions;
 
 namespace PATCHUB.AuthServer.Persistence.Repositories
 {
@@ -30,68 +31,56 @@ namespace PATCHUB.AuthServer.Persistence.Repositories
                 _context.Database.ExecuteSqlRaw(sql,
                     new SqlParameter("@IDUser", entity.IDUser),
                     new SqlParameter("@Token", entity.Token),
-                    new SqlParameter("@ExpirationDate", entity.ExpirationDate));
-
-                return true;
-
+                    new SqlParameter("@ExpirationDate", entity.ExpirationDate),
+                    new SqlParameter("@IDClientCredential", entity.IDClientCredential)
+                    );
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return false;
-
+                throw new ServiceUnavailableException("Refresh Token kaydedilemedi! " + ex.Message);
             }
+            return true;
         }
 
         public bool Update(UserRefreshTokenEntity entity)
         {
-            try
-            {
-                var sql = "UPDATE dbo.USER_REFRESH_TOKEN " +
-                          "SET Token = @Token, ExpirationDate = @ExpirationDate " +
-                          "WHERE IDUser = @IDUser";
+            var sql = "UPDATE dbo.USER_REFRESH_TOKEN " +
+                      "SET Token = @Token, ExpirationDate = @ExpirationDate " +
+                      "WHERE IDUser = @IDUser";
 
-                var affectedRows = _context.Database.ExecuteSqlRaw(sql,
-                    new SqlParameter("@IDUser", entity.IDUser),
-                    new SqlParameter("@Token", entity.Token),
-                    new SqlParameter("@ExpirationDate", entity.ExpirationDate));
+            var affectedRows = _context.Database.ExecuteSqlRaw(sql,
+                new SqlParameter("@IDUser", entity.IDUser),
+                new SqlParameter("@Token", entity.Token),
+                new SqlParameter("@ExpirationDate", entity.ExpirationDate));
 
-                if (affectedRows > 0)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            catch (Exception ex)
+            if (affectedRows > 0)
             {
-                return false;
+                return true;
             }
+            else
+            {
+                throw new ServiceUnavailableException("Güncellenecek Refresh token bulunamadı!");
+            }
+
         }
 
         public bool Delete(int userId)
         {
-            try
-            {
-                var sql = "DELETE FROM dbo.USER_REFRESH_TOKEN WHERE IDUser = @IDUser";
 
-                var affectedRows = _context.Database.ExecuteSqlRaw(sql,
-                    new SqlParameter("@IDUser", userId));
+            var sql = "DELETE FROM dbo.USER_REFRESH_TOKEN WHERE IDUser = @IDUser";
 
-                if (affectedRows > 0)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            catch (Exception ex)
+            var affectedRows = _context.Database.ExecuteSqlRaw(sql,
+                new SqlParameter("@IDUser", userId));
+
+            if (affectedRows > 0)
             {
-                return false;
+                return true;
             }
+            else
+            {
+                throw new ServiceUnavailableException("Silinecek token bulunamadı!");
+            }
+
         }
     }
 }

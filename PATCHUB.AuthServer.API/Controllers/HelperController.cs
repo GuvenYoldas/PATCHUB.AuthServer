@@ -24,7 +24,6 @@ namespace PATCHUB.AuthServer.API.Controllers
         [HttpPost("MailSender")]
         public string MailSender([FromBody]MailRequest request)
         {
-            Console.WriteLine($"Received: {JsonSerializer.Serialize(request)}");
             try
             {
                 if (string.IsNullOrEmpty(request.recipientEmail))
