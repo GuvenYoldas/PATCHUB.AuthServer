@@ -11,70 +11,50 @@ namespace PATCHUB.AuthServer.Application.Services
     public class ClientCredentialService : IClientCredentialService
     {
         private readonly IClientCredentialRepository _clientCredentialRepository;
+        private readonly IClientRateLimitPolicyRepository _rateLimitPolicyRepository;
+        private readonly IClientAllowedIpRepository _allowedIpRepository;
 
-        //private readonly IClientRateLimitPolicyRepository _rateLimitPolicyRepository;
-        //private readonly IClientAllowedIpRepository _allowedIpRepository;
-
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IAuthUnitOfWork _unitOfWork;
 
         public ClientCredentialService(
             IClientCredentialRepository clientCredentialRepository,
-            //IClientRateLimitPolicyRepository rateLimitPolicyRepository,
-            //IClientAllowedIpRepository allowedIpRepository
-            IUnitOfWork unitOfWork
+            IClientRateLimitPolicyRepository rateLimitPolicyRepository,
+            IClientAllowedIpRepository allowedIpRepository,
+            IAuthUnitOfWork unitOfWork
             )
         {
             _clientCredentialRepository = clientCredentialRepository;
+            _rateLimitPolicyRepository = rateLimitPolicyRepository;
+            _allowedIpRepository = allowedIpRepository;
+
+
             _unitOfWork = unitOfWork;
-            //_rateLimitPolicyRepository = rateLimitPolicyRepository;
-            //_allowedIpRepository = allowedIpRepository;
         }
 
         public async Task<bool> CreateClientCredentialAsync(ClientCredentialCreate input)
         {
             // 1. ClientCredentialEntity oluştur
-            var clientCredential = new ClientCredentialEntity
+            var oClientCredential = ClientCredentialEntity.Create(AesEncryption.Encrypt(Guid.NewGuid().ToString()), input.RequestLimit, input.ExpirationDate);
+            await _clientCredentialRepository.AddAsync(oClientCredential);
+
+
+            // 2. RateLimitPolicyEntity oluştur
+            var oClientRateLimitPolicy = ClientRateLimitPolicyEntity.Create(input.MaxRequestsPerMinute, input.MaxRequestsPerHour, input.MaxRequestsPerDay, oClientCredential);
+            await _rateLimitPolicyRepository.AddAsync(oClientRateLimitPolicy);
+
+            // 3. IP listesi varsa AllowedIpEntity kayıtları oluştur
+            if (input.IpList?.Any() == true)
             {
-                IDClient = Guid.NewGuid(),
-                SecretHash = AesEncryption.Encrypt(Guid.NewGuid().ToString()),
-                RequestLimit = input.RequestLimit,
-                RequestCount = 0,
-                ExpirationDate = input.ExpirationDate,
-                StatusCode = (int)StatusCode.ACTIVE
-            };
-
-             _clientCredentialRepository.Created(clientCredential);
-          
-
-            return true;
-            //// 2. RateLimitPolicyEntity oluştur
-            //var rateLimitPolicy = new ClientRateLimitPolicyEntity
-            //{
-            //    IDClientCredential = clientCredential.ID,
-            //    MaxRequestsPerMinute = input.MaxRequestsPerMinute,
-            //    MaxRequestsPerHour = input.MaxRequestsPerHour,
-            //    MaxRequestsPerDay = input.MaxRequestsPerDay,
-            //    StatusCode = (int)StatusCode.ACTIVE
-            //};
-
-            //await _rateLimitPolicyRepository.CreateAsync(rateLimitPolicy);
-
-            //// 3. IP listesi varsa AllowedIpEntity kayıtları oluştur
-            //if (input.IpList != null && input.IpList.Any())
-            //{
-            //    var allowedIps = input.IpList.Select(ip => new ClientAllowedIpEntity
-            //    {
-            //        IDRateLimitPolicy = rateLimitPolicy.ID,
-            //        IpAddress = ip,
-            //        StatusCode = (int)StatusCode.ACTIVE
-            //    }).ToList();
-
-            //    await _allowedIpRepository.CreateRangeAsync(allowedIps);
-            //}
+                foreach (var ip in input.IpList)
+                {
+                    var allowIp = ClientAllowedIpEntity.Create(ip, oClientRateLimitPolicy);
+                    await _allowedIpRepository.AddAsync(allowIp);
+                }
+            }
 
             await _unitOfWork.SaveAsync();
 
-           // return clientCredential;
+            return true;
         }
     }
 }

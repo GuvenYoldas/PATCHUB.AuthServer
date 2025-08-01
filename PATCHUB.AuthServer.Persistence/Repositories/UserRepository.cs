@@ -36,7 +36,7 @@ namespace PATCHUB.AuthServer.Persistence.Repositories
                 PasswordHash = passHass,
                 ReferenceUser = input.ReferenceUser?.Trim(),
                 SaltString = saltStr,
-                StatusCode = (int)StatusCode.WAITING_APPROVE
+                StatusCode = (int)EnumStatusCode.WAITING_APPROVE
             };
 
 

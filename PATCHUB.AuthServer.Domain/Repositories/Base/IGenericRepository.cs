@@ -64,9 +64,8 @@ namespace PATCHUB.AuthServer.Domain.Repositories.Base
 
         Task<bool> GetExistsAsync(Expression<Func<TEntity, bool>> filter = null, bool? isActive = true);
         bool GetExists(Expression<Func<TEntity, bool>> filter = null, bool? isActive = true);
-
-        void Create(TEntity entity);
-        TEntity Created(TEntity entity);
+        TEntity Add(TEntity entity);
+        Task<TEntity> AddAsync(TEntity entity);
         void Update(TEntity entity);
         void Delete(TEntity entity);
         void Delete(TKey id);

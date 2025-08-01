@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PATCHUB.AuthServer.Domain.Enumeration
 {
-    public enum StatusCode
+    public enum EnumStatusCode
     {
         DELETED = -10,
         SYSTEM = 0,

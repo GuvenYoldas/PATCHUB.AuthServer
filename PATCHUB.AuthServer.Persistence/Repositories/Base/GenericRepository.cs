@@ -281,27 +281,22 @@ namespace PATCHUB.AuthServer.Persistence.Repositories.Base
             _clientCredentialAccessor = clientCredentialAccessor;
         }
 
-        public virtual void Create(TEntity entity)
+        public TEntity Add(TEntity entity)
         {
-            entity.CreateDate = DateTime.UtcNow;
-            entity.CreateIp = _clientCredentialAccessor?.ClientIp;
-            entity.CreateUserId = _clientCredentialAccessor?.UserId;
+            SetAuditFields(entity);
             _context.Set<TEntity>().Add(entity);
+            return entity;
         }
 
-        public TEntity Created(TEntity entity)
+        public virtual async Task<TEntity> AddAsync(TEntity entity)
         {
-            entity.CreateDate = DateTime.UtcNow;
-            entity.CreateIp = _clientCredentialAccessor?.ClientIp;
-            entity.CreateUserId = _clientCredentialAccessor?.UserId;
-            _context.Set<TEntity>().Add(entity);
+            SetAuditFields(entity);
+            await _context.Set<TEntity>().AddAsync(entity);
             return entity;
         }
         public virtual void Update(TEntity entity)
         {
-            entity.UpdateDate = DateTime.UtcNow;
-            entity.UpdateIp = _clientCredentialAccessor?.ClientIp;
-            entity.UpdateUserId = _clientCredentialAccessor?.UserId;
+            SetUpdateAuditFields(entity);
             _context.Set<TEntity>().Attach(entity);
             _context.Entry(entity).State = EntityState.Modified;
         }
@@ -345,10 +340,8 @@ namespace PATCHUB.AuthServer.Persistence.Repositories.Base
 
         public void SoftDelete(TEntity entity)
         {
-            entity.UpdateDate = DateTime.UtcNow;
-            entity.UpdateIp = _clientCredentialAccessor?.ClientIp;
-            entity.UpdateUserId = _clientCredentialAccessor?.UserId;
-            entity.StatusCode = (int)StatusCode.PASSIVE;
+            SetUpdateAuditFields(entity);
+            entity.Status = EnumStatusCode.PASSIVE;
             Update(entity);
         }
 
@@ -358,10 +351,8 @@ namespace PATCHUB.AuthServer.Persistence.Repositories.Base
 
             foreach (var entity in entities)
             {
-                entity.UpdateDate = DateTime.UtcNow;
-                entity.UpdateIp = _clientCredentialAccessor?.ClientIp;
-                entity.UpdateUserId = _clientCredentialAccessor?.UserId;
-                entity.StatusCode = (int)StatusCode.PASSIVE;
+                SetUpdateAuditFields(entity);
+                entity.Status = EnumStatusCode.PASSIVE;
                 Update(entity);
             }
 
@@ -387,7 +378,7 @@ namespace PATCHUB.AuthServer.Persistence.Repositories.Base
 
                 if (isActive == true)
                 {
-                    query = query.Where(q => q.StatusCode == (int)StatusCode.ACTIVE);
+                    query = query.Where(q => q.Status == EnumStatusCode.ACTIVE);
                 }
 
                 if (filter != null)
@@ -564,7 +555,7 @@ namespace PATCHUB.AuthServer.Persistence.Repositories.Base
 
             if (isActive == true)
             {
-                query = _context.Set<TEntity>().FirstOrDefault(x => x.ID.Equals(id) && x.StatusCode == (int)StatusCode.ACTIVE);
+                query = _context.Set<TEntity>().FirstOrDefault(x => x.ID.Equals(id) && x.Status == EnumStatusCode.ACTIVE);
             }
             else
             {
@@ -584,7 +575,7 @@ namespace PATCHUB.AuthServer.Persistence.Repositories.Base
 
             if (isActive == true)
             {
-                query = await _context.Set<TEntity>().FirstOrDefaultAsync(x => x.ID.Equals(id) && x.StatusCode == (int)StatusCode.ACTIVE);
+                query = await _context.Set<TEntity>().FirstOrDefaultAsync(x => x.ID.Equals(id) && x.Status == EnumStatusCode.ACTIVE);
             }
             else
             {
@@ -634,6 +625,26 @@ namespace PATCHUB.AuthServer.Persistence.Repositories.Base
                 filter: filter,
                 isActive: isActive)
               .AnyAsync();
+        }
+
+        private void SetAuditFields(TEntity entity)
+        {
+            if (entity is BaseAuditableEntity auditable)
+            {
+                auditable.CreateDate = DateTime.UtcNow;
+                auditable.CreateIp = _clientCredentialAccessor?.ClientIp;
+                auditable.CreateUserId = _clientCredentialAccessor?.UserId;
+            }
+        }
+
+        private void SetUpdateAuditFields(TEntity entity)
+        {
+            if (entity is BaseAuditableEntity auditable)
+            {
+                auditable.UpdateDate = DateTime.UtcNow;
+                auditable.UpdateIp = _clientCredentialAccessor?.ClientIp;
+                auditable.UpdateUserId = _clientCredentialAccessor?.UserId;
+            }
         }
 
     }

@@ -17,9 +17,6 @@ namespace PATCHUB.AuthServer.Persistence.Context
         #region |       DbSet Entity Classes        |
 
         public DbSet<UserEntity> User { get; set; }
-        public DbSet<ClientCredentialEntity> ClientCredential { get; set; }
-        public DbSet<ClientRateLimitPolicyEntity> ClientRateLimitPolicy { get; set; }
-        public DbSet<ClientAllowedIpEntity> ClientAllowedIp { get; set; }
 
         #endregion
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)

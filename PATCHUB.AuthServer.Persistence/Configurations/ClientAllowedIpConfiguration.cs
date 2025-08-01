@@ -14,7 +14,7 @@ namespace PATCHUB.AuthServer.Persistence.Configurations
                    .IsRequired()
                    .HasMaxLength(45); // IPv6 destekleniyorsa 45 karakter yeterlidir
 
-            builder.HasOne(x => x.Policy)
+            builder.HasOne(x => x.RateLimitPolicy)
                    .WithMany(p => p.AllowedIps)
                    .HasForeignKey(x => x.IDRateLimitPolicy)
                    .OnDelete(DeleteBehavior.Cascade);

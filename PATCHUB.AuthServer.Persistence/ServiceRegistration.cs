@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using PATCHUB.AuthServer.Domain.Repositories;
 using PATCHUB.AuthServer.Domain.Repositories.Base;
 using PATCHUB.AuthServer.Persistence.Context;
 using PATCHUB.AuthServer.Persistence.Repositories;
@@ -23,8 +24,14 @@ namespace PATCHUB.AuthServer.Persistence
 
             serviceCollection.AddScoped<UserRefreshTokenRepository>();
             serviceCollection.AddScoped<ContactRequestRepository>();
-            serviceCollection.AddScoped<ClientCredentialRepository>();
-            serviceCollection.AddScoped<IUnitOfWork, UnitOfWork<AuthDbContext>>();
+
+
+            serviceCollection.AddScoped<IClientAllowedIpRepository, ClientAllowedIpRepository>();
+            serviceCollection.AddScoped<IClientCredentialRepository, ClientCredentialRepository>();
+            serviceCollection.AddScoped<IClientRateLimitPolicyRepository, ClientRateLimitPolicyRepository>();
+
+
+            serviceCollection.AddScoped<IAuthUnitOfWork, AuthUnitOfWork>();
 
 
 
@@ -33,7 +40,7 @@ namespace PATCHUB.AuthServer.Persistence
 
             serviceCollection.AddScoped<UserRepository>();
 
-            serviceCollection.AddScoped<IUnitOfWork, UnitOfWork<AppDbContext>>();
+            serviceCollection.AddScoped<IAppUnitOfWork, AppUnitOfWork>();
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using PATCHUB.AuthServer.Domain.Enumeration;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -9,6 +11,16 @@ namespace PATCHUB.AuthServer.Domain.Entities.Base
 {
     public abstract class BaseAuditableEntity
     {
+
+        [NotMapped]
+        public EnumStatusCode Status
+        {
+            get => Enum.IsDefined(typeof(EnumStatusCode), StatusCode)
+                                                 ? (EnumStatusCode)StatusCode
+                                                 : EnumStatusCode.SYSTEM;
+            set => StatusCode = (int)value;
+        }
+
         /// <summary>
         /// -10: DELETED
         /// 0 : SYSTEM

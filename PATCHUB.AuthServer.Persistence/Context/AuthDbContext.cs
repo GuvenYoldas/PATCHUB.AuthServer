@@ -18,6 +18,10 @@ namespace PATCHUB.AuthServer.Persistence.Context
 
         #region |       DbSet Entity Classes        |
 
+        public DbSet<ClientAllowedIpEntity> ClientAllowedIp { get; set; }
+        public DbSet<ClientCredentialEntity> ClientCredential { get; set; }
+        public DbSet<ClientRateLimitPolicyEntity> ClientRateLimitPolicy { get; set; }
+
         public DbSet<UserRefreshTokenEntity> UserRefreshToken { get; set; }
         public DbSet<ContactRequestEntity> ContactRequest { get; set; }
         #endregion

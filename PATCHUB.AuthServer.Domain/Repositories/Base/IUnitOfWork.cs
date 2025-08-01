@@ -11,4 +11,7 @@ namespace PATCHUB.AuthServer.Domain.Repositories.Base
         void Save();
         Task SaveAsync();
     }
+
+    public interface IAuthUnitOfWork : IUnitOfWork { }
+    public interface IAppUnitOfWork : IUnitOfWork { }
 }

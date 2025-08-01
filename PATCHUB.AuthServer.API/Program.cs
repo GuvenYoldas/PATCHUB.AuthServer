@@ -7,6 +7,7 @@ using PATCHUB.SharedLibrary.Services;
 using PATCHUB.SharedLibrary.ErrorHandling.Middleware;
 using PATCHUB.SharedLibrary.ErrorHandling;
 using PATCHUB.SharedLibrary.Abstractions;
+using PATCHUB.AuthServer.Application;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +18,7 @@ builder.Services.AddControllers();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IClientCredentialAccessor, ClientCredentialAccessor>();
 
+builder.Services.AddApplicationServices();
 builder.Services.AddPersistenceServices(builder.Configuration);
 builder.Services.AddInfrastructureServices(builder.Configuration);
 builder.Services.AddExceptionHandling();

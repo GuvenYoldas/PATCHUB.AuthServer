@@ -11,7 +11,7 @@ namespace PATCHUB.AuthServer.Persistence.Repositories
 {
     public class ClientCredentialRepository : GenericRepository<ClientCredentialEntity, int>, IClientCredentialRepository
     {
-        public ClientCredentialRepository(AppDbContext context, IClientCredentialAccessor accessor) : base(context, accessor)
+        public ClientCredentialRepository(AuthDbContext context, IClientCredentialAccessor accessor) : base(context, accessor)
         {
 
         }

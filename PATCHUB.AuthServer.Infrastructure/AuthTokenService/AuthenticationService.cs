@@ -57,13 +57,13 @@ namespace PATCHUB.AuthServer.Infrastructure.AuthTokenService
             if(clientId == null) throw new AuthenticationException("Client veya Giriş Bilgileri hatalı!");
 
 
-            var clientCredential = await _clientCredentialRepository.GetFirstAsync(w => w.IDClient == clientId && w.SecretHash == clientSecret && w.StatusCode == (int)StatusCode.ACTIVE && w.ExpirationDate > DateTime.UtcNow && w.RequestLimit > w.RequestCount);
+            var clientCredential = await _clientCredentialRepository.GetFirstAsync(w => w.IDClient == clientId && w.SecretHash == clientSecret && w.StatusCode == (int)EnumStatusCode.ACTIVE && w.ExpirationDate > DateTime.UtcNow && w.RequestLimit > w.RequestCount);
             if (clientCredential == null) throw new AuthenticationException("Client veya Giriş Bilgileri hatalı!");
 
             
             if (login == null) throw new BadRequestException("Giriş Bilgileri boş!");
 
-            var user = await _userRepository.GetFirstAsync(w => w.Mail == login.Email && w.StatusCode == (int)StatusCode.ACTIVE);
+            var user = await _userRepository.GetFirstAsync(w => w.Mail == login.Email && w.StatusCode == (int)EnumStatusCode.ACTIVE);
 
             if (user == null) throw new AuthenticationException("Client veya Giriş Bilgileri hatalı!");
 

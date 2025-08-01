@@ -6,7 +6,7 @@
         public int MaxRequestsPerMinute { get; set; }
         public int MaxRequestsPerHour { get; set; }
         public int MaxRequestsPerDay { get; set; }
-        public DateTime? ExpirationDate { get; set; }
+        public DateTime ExpirationDate { get; set; }
         public List<string> IpList { get; set; }
     }
 }

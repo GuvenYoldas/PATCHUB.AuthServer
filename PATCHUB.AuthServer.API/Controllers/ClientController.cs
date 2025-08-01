@@ -26,10 +26,10 @@ namespace PATCHUB.AuthServer.API.Controllers
 
 
         [HttpPost("CreateClientCredential")]
-        public Response<bool> CreateClientCredential([FromBody] ClientCredentialCreate request)
+        public async Task<Response<bool>> CreateClientCredential([FromBody] ClientCredentialCreate request)
         {
             // var result = _clientCredentialRepository.CreateClientCredentialAsync(request).Result;
-            var result = _service.CreateClientCredentialAsync(request).Result;
+            var result = await _service.CreateClientCredentialAsync(request);
             return result ? Response<bool>.Success(200) : Response<bool>.Fail("Kayıt oluşturulamadı!", 404, true);
         }
     }
