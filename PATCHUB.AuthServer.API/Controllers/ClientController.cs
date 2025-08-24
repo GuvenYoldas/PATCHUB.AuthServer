@@ -1,9 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using PATCHUB.AuthServer.Application.Dtos.ClientCredential;
 using PATCHUB.AuthServer.Application.Services.Interfaces;
-using PATCHUB.AuthServer.Infrastructure.AuthTokenService;
-using PATCHUB.AuthServer.Persistence.Repositories;
 using PATCHUB.SharedLibrary.Dtos;
 
 
@@ -14,7 +11,6 @@ namespace PATCHUB.AuthServer.API.Controllers
     public class ClientController : ControllerBase
     {
         private readonly ILogger<ClientController> _logger;
-
         private readonly IClientCredentialService _service;
         public ClientController(ILogger<ClientController> logger
             , IClientCredentialService service
@@ -28,7 +24,6 @@ namespace PATCHUB.AuthServer.API.Controllers
         [HttpPost("CreateClientCredential")]
         public async Task<Response<bool>> CreateClientCredential([FromBody] ClientCredentialCreate request)
         {
-            // var result = _clientCredentialRepository.CreateClientCredentialAsync(request).Result;
             var result = await _service.CreateClientCredentialAsync(request);
             return result ? Response<bool>.Success(200) : Response<bool>.Fail("Kayıt oluşturulamadı!", 404, true);
         }

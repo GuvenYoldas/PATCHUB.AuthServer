@@ -14,7 +14,7 @@ using PATCHUB.SharedLibrary.Helpers;
 
 namespace PATCHUB.AuthServer.Persistence.Repositories
 {
-    public class UserRepository : GenericRepository<UserEntity, int>
+    public class UserRepository : AuditableRepositoryBase<UserEntity, int>
     {
         protected readonly AppDbContext _context;
         public UserRepository(AppDbContext context, IClientCredentialAccessor accessor) : base(context, accessor)
@@ -36,7 +36,7 @@ namespace PATCHUB.AuthServer.Persistence.Repositories
                 PasswordHash = passHass,
                 ReferenceUser = input.ReferenceUser?.Trim(),
                 SaltString = saltStr,
-                StatusCode = (int)EnumStatusCode.WAITING_APPROVE
+                Status= EnumStatusCode.WAITING_APPROVE
             };
 
 

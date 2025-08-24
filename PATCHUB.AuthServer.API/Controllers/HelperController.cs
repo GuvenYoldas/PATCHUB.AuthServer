@@ -7,6 +7,8 @@ using PATCHUB.AuthServer.Persistence.Repositories;
 using PATCHUB.AuthServer.Domain.Entities;
 using Microsoft.AspNetCore.Cors;
 using System.Text.Json;
+using PATCHUB.AuthServer.Application.Services.Interfaces;
+using PATCHUB.SharedLibrary.Dtos;
 
 namespace PATCHUB.AuthServer.API.Controllers
 {
@@ -15,39 +17,24 @@ namespace PATCHUB.AuthServer.API.Controllers
     [Route("api/[controller]")]
     public class HelperController : ControllerBase
     {
-        private readonly ContactRequestRepository _contactRequestRepository;
-        public HelperController( ContactRequestRepository contactRequestRepository)
+
+        private readonly ILogger<ClientController> _logger;
+        private readonly IContactRequestService _service;
+
+        public HelperController(ILogger<ClientController> logger, IContactRequestService service)
         {
-            _contactRequestRepository = contactRequestRepository;
+            _logger = logger;
+            _service = service;
         }
-      
+
         [HttpPost("MailSender")]
-        public string MailSender([FromBody]MailRequest request)
+        public async Task<Response<bool>> MailSender([FromBody] MailRequest request)
         {
-            try
-            {
-                if (string.IsNullOrEmpty(request.recipientEmail))
-                {
-                    return "Lütfen iletişim bilgisi belirtiniz!";
-                }
-                _contactRequestRepository.Insert(new ContactRequestEntity
-                {
-                    FullName = request.fullName,
-                    Mail = request.recipientEmail,
-                    MessageText = request.messageText,
-                    Location = request.location
-                });
-              
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Hata: {ex.Message}");
-            }
-
-            return "OK!";
+            return await _service.MailSender(request.fullName, request.recipientEmail, request.messageText, request.location);
         }
-    }
 
+
+    }
     public class MailRequest
     {
         public string recipientEmail { get; set; }
@@ -55,4 +42,5 @@ namespace PATCHUB.AuthServer.API.Controllers
         public string messageText { get; set; }
         public string location { get; set; }
     }
+
 }

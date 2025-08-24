@@ -1,4 +1,4 @@
-﻿using PATCHUB.AuthServer.Domain.Entities.Base;
+﻿using PATCHUB.AuthServer.Domain.Common.Primitives;
 
 namespace PATCHUB.AuthServer.Domain.Entities
 {

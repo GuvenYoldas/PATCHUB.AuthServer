@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using PATCHUB.AuthServer.Domain.Entities.Base;
+using PATCHUB.AuthServer.Domain.Common.Primitives;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,10 +14,10 @@ namespace PATCHUB.AuthServer.Persistence.Configurations.Base
         {
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())
             {
-                if (typeof(BaseAuditableEntity).IsAssignableFrom(entityType.ClrType))
+                if (typeof(AuditableEntity).IsAssignableFrom(entityType.ClrType))
                 {
                     modelBuilder.Entity(entityType.ClrType)
-                        .Property(nameof(BaseAuditableEntity.CreateDate))
+                        .Property(nameof(AuditableEntity.CreateDate))
                         .HasDefaultValueSql("GETUTCDATE()");
                 }
             }

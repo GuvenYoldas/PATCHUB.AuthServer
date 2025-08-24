@@ -3,8 +3,8 @@ using PATCHUB.AuthServer.Domain.Repositories.Base;
 
 namespace PATCHUB.AuthServer.Domain.Repositories
 {
-    public interface IClientRateLimitPolicyRepository : IAuditableRepositoryBase<ClientRateLimitPolicyEntity, int>
+    public interface IContactRequestRepository 
     {
-
+        bool Insert(ContactRequestEntity entity);
     }
 }

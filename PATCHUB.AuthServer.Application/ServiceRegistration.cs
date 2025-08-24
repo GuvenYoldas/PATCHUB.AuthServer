@@ -14,7 +14,7 @@ namespace PATCHUB.AuthServer.Application
         public static void AddApplicationServices(this IServiceCollection services)
         {
             services.AddScoped<IClientCredentialService, ClientCredentialService>();
-
+            services.AddScoped<IContactRequestService, ContactRequestService>();
         }
     }
 }

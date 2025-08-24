@@ -1,281 +1,24 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using PATCHUB.AuthServer.Domain.Common.Primitives;
+using PATCHUB.AuthServer.Domain.Enumeration;
+using PATCHUB.AuthServer.Domain.Repositories.Base;
+using PATCHUB.SharedLibrary.Abstractions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using PATCHUB.AuthServer.Domain.Entities.Base;
-using PATCHUB.AuthServer.Domain.Enumeration;
-using PATCHUB.AuthServer.Domain.Repositories.Base;
-using PATCHUB.AuthServer.Persistence.Context;
-using PATCHUB.SharedLibrary.Abstractions;
 
 namespace PATCHUB.AuthServer.Persistence.Repositories.Base
 {
-    public abstract class GenericRepository<TEntity> where TEntity : BaseEntity
+    public abstract class AuditableRepositoryBase<TEntity, TKey> : IAuditableRepositoryBase<TEntity, TKey>
+    where TEntity : AuditableEntity<TKey>
     {
-        protected readonly DbContext _context;
-        public GenericRepository(DbContext context)
-        {
-            _context = context;
-        }
-
-        public virtual void Create(TEntity entity)
-        {
-            _context.Set<TEntity>().Add(entity);
-        }
-
-        public TEntity Created(TEntity entity)
-        {
-            _context.Set<TEntity>().Add(entity);
-            return entity;
-        }
-        public virtual void Update(TEntity entity)
-        {
-            _context.Set<TEntity>().Attach(entity);
-            _context.Entry(entity).State = EntityState.Modified;
-        }
-
-        public virtual void Delete(TEntity entity)
-        {
-            var dbSet = _context.Set<TEntity>();
-            if (_context.Entry(entity).State == EntityState.Detached)
-            {
-                dbSet.Attach(entity);
-            }
-            dbSet.Remove(entity);
-        }
-
-        public virtual void DeleteAll(IEnumerable<TEntity> entities)
-        {
-            var dbSet = _context.Set<TEntity>();
-
-            foreach (var entity in entities)
-            {
-                if (_context.Entry(entity).State == EntityState.Detached)
-                {
-                    dbSet.Remove(entity);
-                }
-                dbSet.Remove(entity);
-            }
-
-        }
-
-
-        protected virtual IQueryable<TEntity> GetQueryable(
-          Expression<Func<TEntity, bool>> filter = null,
-          Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
-          string includeProperties = null,
-          int? skip = null,
-          int? take = null)
-
-        {
-            try
-            {
-                // _context.ChangeTracker.AutoDetectChangesEnabled = false;
-
-                includeProperties = includeProperties ?? string.Empty;
-                IQueryable<TEntity> query = _context.Set<TEntity>();
-
-                query = query.AsNoTracking();
-
-                if (filter != null)
-                {
-                    query = query.Where(filter);
-                }
-
-                foreach (var includeProperty in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
-                {
-                    query = query.Include(includeProperty);
-                }
-
-                if (orderBy != null)
-                {
-                    query = orderBy(query);
-                }
-
-                if (skip.HasValue)
-                {
-                    query = query.Skip(skip.Value);
-                }
-
-                if (take.HasValue)
-                {
-                    query = query.Take(take.Value);
-                }
-
-                return query;
-            }
-            finally
-            {
-                _context.ChangeTracker.AutoDetectChangesEnabled = true;
-            }
-        }
-
-        public virtual IEnumerable<TEntity> GetAll(
-          Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
-          string includeProperties = null,
-          int? skip = null,
-          int? take = null,
-          bool? isActive = true)
-
-        {
-            return GetQueryable(
-                filter: null,
-                orderBy: orderBy,
-                includeProperties: includeProperties,
-                skip: skip,
-                take: take)
-              .ToList();
-        }
-
-        public virtual async Task<IEnumerable<TEntity>> GetAllAsync(
-          Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
-          string includeProperties = null,
-          int? skip = null,
-          int? take = null)
-
-        {
-            return await GetQueryable(
-                filter: null,
-                orderBy: orderBy,
-                includeProperties: includeProperties,
-                skip: skip,
-                take: take)
-              .ToListAsync();
-        }
-
-        public virtual IEnumerable<TEntity> Get(
-          Expression<Func<TEntity, bool>> filter = null,
-          Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
-          string includeProperties = null,
-          int? skip = null,
-          int? take = null)
-
-        {
-            return GetQueryable(
-                filter: filter,
-                orderBy: orderBy,
-                includeProperties: includeProperties,
-                skip: skip,
-                take: take)
-              .ToList();
-        }
-
-        public virtual async Task<IEnumerable<TEntity>> GetAsync(
-          Expression<Func<TEntity, bool>> filter = null,
-          Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
-          string includeProperties = null,
-          int? skip = null,
-          int? take = null)
-
-        {
-            return await GetQueryable(
-                filter: filter,
-                orderBy: orderBy,
-                includeProperties: includeProperties,
-                skip: skip,
-                take: take)
-              .ToListAsync();
-        }
-
-        public virtual TEntity GetOne(
-          Expression<Func<TEntity, bool>> filter = null,
-          string includeProperties = "")
-
-        {
-            return GetQueryable(
-                filter: filter,
-                orderBy: null,
-                includeProperties: includeProperties)
-              .SingleOrDefault();
-        }
-
-        public virtual async Task<TEntity> GetOneAsync(
-          Expression<Func<TEntity, bool>> filter = null,
-          string includeProperties = null,
-          bool? isActive = true)
-
-        {
-            return await GetQueryable(
-                filter: filter,
-                orderBy: null,
-                includeProperties: includeProperties)
-              .SingleOrDefaultAsync();
-        }
-
-        public virtual TEntity GetFirst(
-          Expression<Func<TEntity, bool>> filter = null,
-          Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
-          string includeProperties = null)
-
-        {
-            return GetQueryable(
-                filter: filter,
-                orderBy: orderBy,
-                includeProperties: includeProperties)
-              .FirstOrDefault();
-        }
-
-        public virtual async Task<TEntity> GetFirstAsync(
-          Expression<Func<TEntity, bool>> filter = null,
-          Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
-          string includeProperties = null,
-          bool? isActive = true)
-
-        {
-            return await GetQueryable(
-                filter: filter,
-                orderBy: orderBy,
-                includeProperties: includeProperties)
-              .FirstOrDefaultAsync();
-        }
-
-        public virtual int GetCount(
-          Expression<Func<TEntity, bool>> filter = null)
-        {
-            return GetQueryable(
-                filter: filter)
-              .Count();
-        }
-
-        public virtual async Task<int> GetCountAsync(
-          Expression<Func<TEntity, bool>> filter = null)
-
-        {
-            return await GetQueryable(
-                filter: filter)
-              .CountAsync();
-        }
-
-        public virtual bool GetExists(
-          Expression<Func<TEntity, bool>> filter = null)
-
-        {
-            return GetQueryable(
-                filter: filter)
-              .Any();
-        }
-
-        public virtual async Task<bool> GetExistsAsync(
-          Expression<Func<TEntity, bool>> filter = null)
-
-        {
-            return await GetQueryable(
-                filter: filter)
-              .AnyAsync();
-        }
-    }
-
-    public abstract class GenericRepository<TEntity, TKey> : IGenericRepository<TEntity, TKey>
-    where TEntity : BaseEntity<TKey>
-    {
-        //protected readonly DbContext _context;
         protected readonly DbContext _context;
         protected readonly IClientCredentialAccessor _clientCredentialAccessor;
 
-        public GenericRepository(DbContext context, IClientCredentialAccessor clientCredentialAccessor)
+        public AuditableRepositoryBase(DbContext context, IClientCredentialAccessor clientCredentialAccessor)
         {
             _context = context;
             _clientCredentialAccessor = clientCredentialAccessor;
@@ -296,7 +39,7 @@ namespace PATCHUB.AuthServer.Persistence.Repositories.Base
         }
         public virtual void Update(TEntity entity)
         {
-            SetUpdateAuditFields(entity);
+            UpdateAuditFields(entity);
             _context.Set<TEntity>().Attach(entity);
             _context.Entry(entity).State = EntityState.Modified;
         }
@@ -340,7 +83,7 @@ namespace PATCHUB.AuthServer.Persistence.Repositories.Base
 
         public void SoftDelete(TEntity entity)
         {
-            SetUpdateAuditFields(entity);
+            UpdateAuditFields(entity);
             entity.Status = EnumStatusCode.PASSIVE;
             Update(entity);
         }
@@ -351,7 +94,7 @@ namespace PATCHUB.AuthServer.Persistence.Repositories.Base
 
             foreach (var entity in entities)
             {
-                SetUpdateAuditFields(entity);
+                UpdateAuditFields(entity);
                 entity.Status = EnumStatusCode.PASSIVE;
                 Update(entity);
             }
@@ -629,24 +372,18 @@ namespace PATCHUB.AuthServer.Persistence.Repositories.Base
 
         private void SetAuditFields(TEntity entity)
         {
-            if (entity is BaseAuditableEntity auditable)
-            {
-                auditable.CreateDate = DateTime.UtcNow;
-                auditable.CreateIp = _clientCredentialAccessor?.ClientIp;
-                auditable.CreateUserId = _clientCredentialAccessor?.UserId;
-            }
+            entity.CreateDate = DateTime.UtcNow;
+            entity.CreateIp = _clientCredentialAccessor?.ClientIp;
+            entity.CreateUserId = _clientCredentialAccessor?.UserId;
         }
 
-        private void SetUpdateAuditFields(TEntity entity)
+        private void UpdateAuditFields(TEntity entity)
         {
-            if (entity is BaseAuditableEntity auditable)
-            {
-                auditable.UpdateDate = DateTime.UtcNow;
-                auditable.UpdateIp = _clientCredentialAccessor?.ClientIp;
-                auditable.UpdateUserId = _clientCredentialAccessor?.UserId;
-            }
+            entity.UpdateDate = DateTime.UtcNow;
+            entity.UpdateIp = _clientCredentialAccessor?.ClientIp;
+            entity.UpdateUserId = _clientCredentialAccessor?.UserId;
+
         }
 
     }
-
 }

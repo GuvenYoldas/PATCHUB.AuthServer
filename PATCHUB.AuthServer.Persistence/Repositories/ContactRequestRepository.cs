@@ -1,22 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Azure;
-using Microsoft.Data.SqlClient;
+﻿using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using PATCHUB.AuthServer.Domain.Entities;
-using PATCHUB.AuthServer.Domain.Entities.Base;
+using PATCHUB.AuthServer.Domain.Repositories;
 using PATCHUB.AuthServer.Persistence.Context;
 using PATCHUB.AuthServer.Persistence.Repositories.Base;
+using PATCHUB.SharedLibrary.Abstractions;
 
 namespace PATCHUB.AuthServer.Persistence.Repositories
 {
-    public class ContactRequestRepository : GenericRepository<ContactRequestEntity>
+    public class ContactRequestRepository : IContactRequestRepository
     {
         protected readonly AuthDbContext _context;
-        public ContactRequestRepository(AuthDbContext context) : base(context)
+        public ContactRequestRepository(AuthDbContext context)
         {
             _context = context;
         }

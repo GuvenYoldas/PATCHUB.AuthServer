@@ -1,9 +1,5 @@
-﻿using PATCHUB.AuthServer.Domain.Entities.Base;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using PATCHUB.AuthServer.Domain.Common.Primitives;
+using PATCHUB.AuthServer.Domain.Enumeration;
 
 namespace PATCHUB.AuthServer.Domain.Entities
 {
@@ -13,7 +9,19 @@ namespace PATCHUB.AuthServer.Domain.Entities
         public string Mail { get; set; }
         public string MessageText { get; set; }
         public DateTime CreatedDate { get; set; }
-
         public string Location { get; set; }
+        private ContactRequestEntity() { } // EF için
+
+        public static ContactRequestEntity Create(string fullName, string mail, string messageText, string location) // constructure
+        {
+            return new ContactRequestEntity
+            {
+                FullName = fullName,
+                Mail = mail,
+                MessageText = messageText,
+                CreatedDate = DateTime.UtcNow,
+                Location = location
+            };
+        }
     }
 }

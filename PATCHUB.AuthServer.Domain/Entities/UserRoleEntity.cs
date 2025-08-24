@@ -1,10 +1,9 @@
-﻿using PATCHUB.AuthServer.Domain.Entities.Base;
-
+﻿using PATCHUB.AuthServer.Domain.Common.Primitives;
 
 namespace PATCHUB.AuthServer.Domain.Entities
 {
 
-    public class UserRoleEntity : BaseEntity<int>
+    public class UserRoleEntity : AuditableEntity<int>
     {
         public int IDUser { get; set; }
         public int IDRole { get; set; }

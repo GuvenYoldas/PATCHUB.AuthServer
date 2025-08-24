@@ -1,14 +1,9 @@
-﻿using PATCHUB.AuthServer.Domain.Entities.Base;
+﻿using PATCHUB.AuthServer.Domain.Common.Primitives;
 using PATCHUB.AuthServer.Domain.Enumeration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PATCHUB.AuthServer.Domain.Entities
 {
-    public class ClientRateLimitPolicyEntity : BaseEntity<int>
+    public class ClientRateLimitPolicyEntity : AuditableEntity<int>
     {
         public int IDClientCredential { get; set; } // FK olacak
         public int MaxRequestsPerMinute { get; set; }

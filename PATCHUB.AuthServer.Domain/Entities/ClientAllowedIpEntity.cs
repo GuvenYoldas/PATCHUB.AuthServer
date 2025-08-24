@@ -1,9 +1,9 @@
-﻿using PATCHUB.AuthServer.Domain.Entities.Base;
+﻿using PATCHUB.AuthServer.Domain.Common.Primitives;
 using PATCHUB.AuthServer.Domain.Enumeration;
 
 namespace PATCHUB.AuthServer.Domain.Entities
 {
-    public class ClientAllowedIpEntity : BaseEntity<int>
+    public class ClientAllowedIpEntity : AuditableEntity<int>
     {
         public int IDRateLimitPolicy { get; set; } // Foreign key to ClientRateLimitPolicyEntity
         public string IpAddress { get; set; }

@@ -6,7 +6,7 @@ using PATCHUB.SharedLibrary.Abstractions;
 
 namespace PATCHUB.AuthServer.Persistence.Repositories
 {
-    public class ClientRateLimitPolicyRepository : GenericRepository<ClientRateLimitPolicyEntity, int>, IClientRateLimitPolicyRepository
+    public class ClientRateLimitPolicyRepository : AuditableRepositoryBase<ClientRateLimitPolicyEntity, int>, IClientRateLimitPolicyRepository
     {
         public ClientRateLimitPolicyRepository(AuthDbContext context, IClientCredentialAccessor accessor) : base(context, accessor)
         {

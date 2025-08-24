@@ -3,7 +3,7 @@ using PATCHUB.AuthServer.Domain.Repositories.Base;
 
 namespace PATCHUB.AuthServer.Domain.Repositories
 {
-    public interface IClientAllowedIpRepository : IGenericRepository<ClientAllowedIpEntity, int>
+    public interface IClientAllowedIpRepository : IAuditableRepositoryBase<ClientAllowedIpEntity, int>
     {
 
     }

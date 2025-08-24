@@ -28,13 +28,17 @@ namespace PATCHUB.AuthServer.API.Controllers
             _authenticationService = authenticationService;
             _userRepository = userRepository;
         }
-
+        /// <summary>
+        /// Ornek kullanıcı 
+        /// email : alp.yoldas@gmail.com
+        /// pass  : 1q2w3e4r5t6y7u8ı9o_!#
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPost("CreateTokenAsync")]
         public async Task<Response<AppToken>> CreateTokenAsync([FromBody] AppLogin request)
         {
-            return await _authenticationService.CreateTokenAsync(new Application.Dtos.AppLogin { Email = "alp.yoldas@gmail.com", Password = "1q2w3e4r5t6y7u8ı9o_!#" });
-            //return await _authenticationService.CreateTokenAsync(new Application.Dtos.AppLogin { Email = request.Email, Password = request.Password });
-
+            return await _authenticationService.CreateTokenAsync(new Application.Dtos.AppLogin { Email = request.Email, Password = request.Password });
         }
 
         [Authorize]

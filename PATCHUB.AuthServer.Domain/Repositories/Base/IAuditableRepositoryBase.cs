@@ -1,8 +1,13 @@
-﻿using System.Linq.Expressions;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace PATCHUB.AuthServer.Domain.Repositories.Base
-{
-    public interface IGenericRepository<TEntity, TKey> where TEntity : class
+{ 
+    public interface IAuditableRepositoryBase<TEntity, TKey> where TEntity : class
     {
         Task<TEntity> GetByIdAsync(TKey id, bool? isActive = true);
         TEntity GetById(TKey id, bool? isActive = true);

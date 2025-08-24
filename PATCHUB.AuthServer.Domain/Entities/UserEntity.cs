@@ -1,14 +1,8 @@
-﻿using PATCHUB.AuthServer.Domain.Entities.Base;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
+﻿using PATCHUB.AuthServer.Domain.Common.Primitives;
 
 namespace PATCHUB.AuthServer.Domain.Entities
 {
-    public class UserEntity: BaseEntity<int>
+    public class UserEntity: AuditableEntity<int>
     {
         public UserEntity()
         {

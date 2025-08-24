@@ -23,9 +23,9 @@ namespace PATCHUB.AuthServer.Persistence
             options.UseSqlServer(configuration?.GetConnectionString("AuthDbSQLConnection")));
 
             serviceCollection.AddScoped<UserRefreshTokenRepository>();
-            serviceCollection.AddScoped<ContactRequestRepository>();
 
 
+            serviceCollection.AddScoped<IContactRequestRepository, ContactRequestRepository>();
             serviceCollection.AddScoped<IClientAllowedIpRepository, ClientAllowedIpRepository>();
             serviceCollection.AddScoped<IClientCredentialRepository, ClientCredentialRepository>();
             serviceCollection.AddScoped<IClientRateLimitPolicyRepository, ClientRateLimitPolicyRepository>();

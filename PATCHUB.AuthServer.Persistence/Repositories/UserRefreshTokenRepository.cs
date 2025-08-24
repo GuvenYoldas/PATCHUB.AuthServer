@@ -7,14 +7,14 @@ using Azure;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using PATCHUB.AuthServer.Domain.Entities;
-using PATCHUB.AuthServer.Domain.Entities.Base;
+using PATCHUB.AuthServer.Domain.Common.Primitives;
 using PATCHUB.AuthServer.Persistence.Context;
 using PATCHUB.AuthServer.Persistence.Repositories.Base;
 using PATCHUB.SharedLibrary.ErrorHandling.Exceptions;
 
 namespace PATCHUB.AuthServer.Persistence.Repositories
 {
-    public class UserRefreshTokenRepository : GenericRepository<UserRefreshTokenEntity>
+    public class UserRefreshTokenRepository : RepositoryBase<UserRefreshTokenEntity, int>
     {
         protected readonly AuthDbContext _context;
         public UserRefreshTokenRepository(AuthDbContext context) : base(context)

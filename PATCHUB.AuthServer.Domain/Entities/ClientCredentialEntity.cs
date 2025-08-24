@@ -1,4 +1,5 @@
-﻿using PATCHUB.AuthServer.Domain.Entities.Base;
+﻿using PATCHUB.AuthServer.Domain.Common.Abstractions;
+using PATCHUB.AuthServer.Domain.Common.Primitives;
 using PATCHUB.AuthServer.Domain.Enumeration;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace PATCHUB.AuthServer.Domain.Entities
 {
-    public class ClientCredentialEntity : BaseEntity<int>
+    public class ClientCredentialEntity : AuditableEntity<int>
     {
         public Guid IDClient { get; set; }
         public string SecretHash { get; set; }

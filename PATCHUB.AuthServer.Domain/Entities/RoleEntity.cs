@@ -1,4 +1,4 @@
-﻿using PATCHUB.AuthServer.Domain.Entities.Base;
+﻿using PATCHUB.AuthServer.Domain.Common.Primitives;
 
 
 namespace PATCHUB.AuthServer.Domain.Entities
@@ -7,10 +7,8 @@ namespace PATCHUB.AuthServer.Domain.Entities
     {
         public string Name { get; set; } = null!;
         public string? Description { get; set; }
-
         public int IDClientCredential { get; set; }
         public ClientCredentialEntity Client { get; set; } = null!;
-
         public ICollection<UserRoleEntity> UserRoles { get; set; } = new List<UserRoleEntity>();
     }
 }
